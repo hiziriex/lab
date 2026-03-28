@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>実効値とは | hiziriex lab</title>
+
+  <!-- KaTeX CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+  <!-- 自サイトCSS -->
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/markdown.css">
+
+  <!-- KaTeX JS -->
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+
+  <!-- 自動レンダリング -->
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: '$$', right: '$$', display: true},
+          {left: '$', right: '$', display: false}
+        ]
+      });
+    ">
+  </script>
+</head>
+
+<body class="page-article">
+  <header class="site-header">
+    <div class="container-article header-inner">
+      <div class="site-brand">
+        <h1 class="site-title">hiziriex lab</h1>
+        <p class="site-subtitle">技術計算ツールと備忘録</p>
+      </div>
+
+      <nav class="main-nav">
+        <a href="#">TOP</a>
+        <a href="#">計算ツール</a>
+        <a href="#">技術記事</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page-main container-article">
+    <article class="markdown-body">
+      <h1>実効値とは</h1>
+      <p class="article-meta">カテゴリ: 波形 / 更新日: 2026-03-13</p>
+
+      <p>
+        実効値は、交流電圧や交流電流を、同じ熱的効果を与える直流値として表したものです。
+      </p>
+
+      <div class="admonition admonition-note">
+        <div class="admonition-title">Note</div>
+        実効値は平均値とは異なります。
+      </div>
+
+      <h2>概要</h2>
+      <p>
+        抵抗に交流を加えたときの発熱量を、ある直流電圧で与えたときと等しくなるように換算した値として考えると直感的です。
+      </p>
+
+      <blockquote>
+        実効値は「交流を直流相当に換算した値」と考えるとわかりやすいです。
+      </blockquote>
+
+      <h2>インライン数式</h2>
+      <p>
+        正弦波では $V_{\mathrm{rms}} = \frac{V_{\mathrm{peak}}}{\sqrt{2}}$ となります。
+      </p>
+
+      <h2>ブロック数式</h2>
+      <p>実効値の定義は以下です：</p>
+
+      <p>
+        $$
+        V_{\mathrm{rms}} =
+        \sqrt{\frac{1}{T} \int_0^T v(t)^2 \, dt}
+        $$
+      </p>
+
+      <h2>電気っぽい式</h2>
+      <p>
+        インピーダンスは次のように表されます：
+      </p>
+
+      <p>
+        $$
+        Z = R + j\omega L + \frac{1}{j\omega C}
+        $$
+      </p>
+
+      <h2>要点</h2>
+      <ul>
+        <li>正弦波ではピーク値の 1 / √2</li>
+        <li>平均値とは別物</li>
+        <li>加算時は位相や相関に注意</li>
+      </ul>
+
+      <h2>表の例</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>量</th>
+            <th>値</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ピーク値</td>
+            <td>10 V</td>
+          </tr>
+          <tr>
+            <td>実効値</td>
+            <td>7.07 V</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <figure>
+        <img src="https://placehold.co/700x260" alt="sample diagram">
+        <figcaption>図1: 実効値の概念図</figcaption>
+      </figure>
+    </article>
+
+    <section class="page-section card">
+      <h2>関連記事</h2>
+      <ul class="related-list">
+        <li><a href="#">実効値の加算</a></li>
+        <li><a href="#">平均値との違い</a></li>
+        <li><a href="#">交流を直流換算する考え方</a></li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

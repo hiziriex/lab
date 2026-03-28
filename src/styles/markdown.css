@@ -1,0 +1,26 @@
+.markdown-body h2 {
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--color-primary-soft);
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  padding-left: 24px;
+  margin: 16px 0;
+}
+
+.markdown-body li + li {
+  margin-top: 6px;
+}
+
+.markdown-body table {
+  display: table;
+}
+
+.markdown-body img {
+  border-radius: var(--radius-sm);
+}
+
+.markdown-body .admonition {
+  margin: 24px 0;
+}

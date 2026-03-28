@@ -1,0 +1,88 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+<BaseLayout title="抵抗分圧計算 | hiziriex lab">
+  <div class="page-tool">
+    <header class="site-header">
+      <div class="container-tool header-inner">
+        <div class="site-brand">
+          <h1 class="site-title">hiziriex lab</h1>
+          <p class="site-subtitle">技術計算ツールと備忘録</p>
+        </div>
+
+        <nav class="main-nav">
+          <a href="/">TOP</a>
+          <a href="/tools/">計算ツール</a>
+          <a href="/articles/">技術記事</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="page-main container-tool tool-page">
+      <section class="tool-header">
+        <h2>抵抗分圧計算</h2>
+        <p class="tool-description">
+          入力電圧と目標出力電圧から抵抗分圧の値を計算するツールです。
+        </p>
+      </section>
+
+      <section class="card">
+        <div class="block-header">
+          <h3>回路図</h3>
+          <button class="button button-outline">閉じる</button>
+        </div>
+        <div class="placeholder-box">[ 回路図が入るエリア ]</div>
+      </section>
+
+      <section class="card">
+        <div class="block-header">
+          <h3>数式</h3>
+          <button class="button button-outline">開く</button>
+        </div>
+        <div class="placeholder-box">[ KaTeXで数式を表示するエリア ]</div>
+      </section>
+
+      <section class="card">
+        <h3>入力</h3>
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label class="form-label">入力電圧 Vin</label>
+            <input class="input" type="text" placeholder="例: 12" />
+            <p class="field-hint">SI接頭辞対応例: 1k, 10u, 220n</p>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">目標出力電圧 Vout</label>
+            <input class="input" type="text" placeholder="例: 5" />
+            <p class="field-hint">例: 3.3 / 5 / 1.8</p>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">基準抵抗 R2</label>
+            <input class="input" type="text" placeholder="例: 10k" />
+            <p class="field-hint">例: 4.7k, 10k, 100k</p>
+          </div>
+        </div>
+
+        <div class="button-row">
+          <button class="button button-primary">計算</button>
+          <button class="button button-outline">リセット</button>
+          <button class="button button-outline">条件URLをコピー</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>結果一覧</h3>
+        <table class="result-table">
+          <tbody>
+            <tr><td>R1</td><td>14.0 kΩ</td></tr>
+            <tr><td>R2</td><td>10.0 kΩ</td></tr>
+            <tr><td>計算出力電圧</td><td>5.00 V</td></tr>
+            <tr><td>誤差</td><td>0.00 %</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+</BaseLayout>

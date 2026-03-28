@@ -1,0 +1,63 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+<BaseLayout title="実効値とは | hiziriex lab">
+  <div class="page-article">
+    <header class="site-header">
+      <div class="container-article header-inner">
+        <div class="site-brand">
+          <h1 class="site-title">hiziriex lab</h1>
+          <p class="site-subtitle">技術計算ツールと備忘録</p>
+        </div>
+
+        <nav class="main-nav">
+          <a href="/">TOP</a>
+          <a href="/tools/">計算ツール</a>
+          <a href="/articles/">技術記事</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="page-main container-article">
+      <article class="markdown-body">
+        <h1>実効値とは</h1>
+        <p class="article-meta">カテゴリ: 波形 / 更新日: 2026-03-13</p>
+
+        <p>
+          実効値は、交流電圧や交流電流を、同じ熱的効果を与える直流値として表したものです。
+        </p>
+
+        <div class="admonition admonition-note">
+          <div class="admonition-title">Note</div>
+          実効値は平均値とは異なります。
+        </div>
+
+        <h2>概要</h2>
+        <p>
+          抵抗に交流を加えたときの発熱量を、ある直流電圧で与えたときと等しくなるように換算した値として考えると直感的です。
+        </p>
+
+        <h2>インライン数式</h2>
+        <p>
+          正弦波では $V_&#123;\mathrm&#123;rms&#125;&#125; = \frac&#123;V_&#123;\mathrm&#123;peak&#125;&#125;&#125;&#123;\sqrt&#123;2&#125;&#125;$ となります。
+        </p>
+
+        <h2>ブロック数式</h2>
+        <p>
+          $$
+          V_&#123;\mathrm&#123;rms&#125;&#125; =
+          \sqrt&#123;\frac&#123;1&#125;&#123;T&#125; \int_0^T v(t)^2 \, dt&#125;
+          $$
+        </p>
+      </article>
+
+      <section class="page-section card">
+        <h2>関連記事</h2>
+        <ul class="related-list">
+          <li><a href="#">実効値の加算</a></li>
+          <li><a href="#">平均値との違い</a></li>
+        </ul>
+      </section>
+    </main>
+  </div>
+</BaseLayout>
