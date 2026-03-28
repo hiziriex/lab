@@ -1,13 +1,15 @@
 import { defineConfig } from "astro/config";
 
 export default defineConfig({
+  site: "https://hiziriex.github.io",
+  base: "/lab",
   output: "static",
   compressHTML: false,
-  dev: {
-    inlineStylesheets: "never"
+  build: {
+    inlineStylesheets: "never",
   },
   vite: {
-    dev: {
+    build: {
       minify: false,
     },
   },
