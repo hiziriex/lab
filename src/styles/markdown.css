@@ -24,3 +24,7 @@
 .markdown-body .admonition {
   margin: 24px 0;
 }
+
+.katex {
+  font-size: 1.05em;
+}

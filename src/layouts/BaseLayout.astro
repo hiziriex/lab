@@ -10,6 +10,7 @@ interface Props {
 }
 
 const { title } = Astro.props;
+const base = import.meta.env.BASE_URL;
 ---
 <!DOCTYPE html>
 <html lang="ja">
@@ -44,6 +45,25 @@ const { title } = Astro.props;
   </head>
 
   <body>
-    <slot />
+    <header class="site-header">
+      <div class="header-inner">
+        <div class="site-brand">
+          <a class="site-title-link" href={base}>
+            <h1 class="site-title">hiziriex lab</h1>
+          </a>
+          <p class="site-subtitle">技術計算ツールと備忘録</p>
+        </div>
+
+        <nav class="main-nav">
+          <a href={base}>TOP</a>
+          <a href={`${base}tools/`}>計算ツール</a>
+          <a href={`${base}articles/`}>技術記事</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="page-main">
+      <slot />
+    </main>
   </body>
 </html>

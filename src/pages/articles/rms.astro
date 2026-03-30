@@ -3,22 +3,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 ---
 <BaseLayout title="実効値とは | hiziriex lab">
   <div class="page-article">
-    <header class="site-header">
-      <div class="container-article header-inner">
-        <div class="site-brand">
-          <h1 class="site-title">hiziriex lab</h1>
-          <p class="site-subtitle">技術計算ツールと備忘録</p>
-        </div>
-
-        <nav class="main-nav">
-          <a href="/">TOP</a>
-          <a href="/tools/">計算ツール</a>
-          <a href="/articles/">技術記事</a>
-        </nav>
-      </div>
-    </header>
-
-    <main class="page-main container-article">
+    <div class="container-article">
       <article class="markdown-body">
         <h1>実効値とは</h1>
         <p class="article-meta">カテゴリ: 波形 / 更新日: 2026-03-13</p>
@@ -37,18 +22,54 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
           抵抗に交流を加えたときの発熱量を、ある直流電圧で与えたときと等しくなるように換算した値として考えると直感的です。
         </p>
 
+        <blockquote>
+          実効値は「交流を直流相当に換算した値」と考えるとわかりやすいです。
+        </blockquote>
+
         <h2>インライン数式</h2>
         <p>
-          正弦波では $V_&#123;\mathrm&#123;rms&#125;&#125; = \frac&#123;V_&#123;\mathrm&#123;peak&#125;&#125;&#125;&#123;\sqrt&#123;2&#125;&#125;$ となります。
+          正弦波では $V_{\mathrm&#123;rms&#125;} = \frac&#123;V_{\mathrm&#123;peak&#125;}&#125;&#123;\sqrt&#123;2&#125;&#125;$ となります。
         </p>
 
         <h2>ブロック数式</h2>
         <p>
           $$
-          V_&#123;\mathrm&#123;rms&#125;&#125; =
+          V_{\mathrm&#123;rms&#125;} =
           \sqrt&#123;\frac&#123;1&#125;&#123;T&#125; \int_0^T v(t)^2 \, dt&#125;
           $$
         </p>
+
+        <h2>要点</h2>
+        <ul>
+          <li>正弦波ではピーク値の 1 / √2</li>
+          <li>平均値とは別物</li>
+          <li>加算時は位相や相関に注意</li>
+        </ul>
+
+        <h2>表の例</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>量</th>
+              <th>値</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>ピーク値</td>
+              <td>10 V</td>
+            </tr>
+            <tr>
+              <td>実効値</td>
+              <td>7.07 V</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <figure>
+          <img src="https://placehold.co/700x260" alt="sample diagram" />
+          <figcaption>図1: 実効値の概念図</figcaption>
+        </figure>
       </article>
 
       <section class="page-section card">
@@ -58,6 +79,6 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
           <li><a href="#">平均値との違い</a></li>
         </ul>
       </section>
-    </main>
+    </div>
   </div>
 </BaseLayout>

@@ -104,11 +104,6 @@ textarea:focus {
   width: 40%;
 }
 
-.result-table td + td,
-.result-table th + th {
-  border-left: 1px solid var(--color-border);
-}
-
 .admonition {
   border-radius: var(--radius-md);
   padding: 16px;

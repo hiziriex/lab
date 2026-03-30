@@ -1,24 +1,10 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+const base = import.meta.env.BASE_URL;
 ---
 <BaseLayout title="hiziriex lab | 技術計算ツールと備忘録">
   <div class="page-top">
-    <header class="site-header">
-      <div class="container-top header-inner">
-        <div class="site-brand">
-          <h1 class="site-title">hiziriex lab</h1>
-          <p class="site-subtitle">技術計算ツールと備忘録</p>
-        </div>
-
-        <nav class="main-nav">
-          <a href="/">TOP</a>
-          <a href="/tools/">計算ツール</a>
-          <a href="/articles/">技術記事</a>
-        </nav>
-      </div>
-    </header>
-
-    <main class="page-main container-top">
+    <div class="container-top">
       <section class="page-section">
         <h2>このサイトについて</h2>
         <p>
@@ -32,7 +18,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           <div class="card">
             <h3>抵抗回路</h3>
             <ul class="link-list">
-              <li><a href="/tools/voltage-divider/">抵抗分圧</a></li>
+              <li><a href={`${base}tools/voltage-divider/`}>抵抗分圧</a></li>
             </ul>
           </div>
 
@@ -52,7 +38,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           <div class="card">
             <h3>基礎</h3>
             <ul class="link-list">
-              <li><a href="/articles/rms/">実効値とは</a></li>
+              <li><a href={`${base}articles/rms/`}>実効値とは</a></li>
             </ul>
           </div>
 
@@ -64,6 +50,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           </div>
         </div>
       </section>
-    </main>
+    </div>
   </div>
 </BaseLayout>
