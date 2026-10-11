@@ -146,3 +146,17 @@ PR / merge / tag / Release / deploy / repository settings は未実施。
 - Pixel 7 差分: `test-results/e2e/divider--visual-初期状態-android/divider-diff.png`。baseline の hash は前節の承認済み2枚から変更なし。
 - UI仕様、Testing Strategy、CHANGELOG を更新。architecture の判断は変わらず、新規 ADR は不要。
 - dependency / audit 例外・正式 version・X/Twitter・GitHub settings・Release / deploy設定は変更なし。PR / merge / tag / Release / deploy は未実施。baseline 更新は人間による画像確認と別途承認を待つ。
+
+
+## overlay 修正後の Pixel 7 baseline 承認・登録（2026-10-11）
+
+- 人間が Desktop / Pixel 7 の review 画像、Pixel 7 の collapsed / expanded / scroll 後の挙動、および `pnpm dev` での操作を確認し、Pixel 7 baseline 更新を承認した。
+- 前回 Visual Regression が保存した安定した actual（1082×4964px）を Pixel 7 baseline に登録。初回 full page review（1082×4961px）との3 device pxの高さ差は全体撮影時の安定化によるもの。画像の加工、比較閾値の緩和、retry 増加は行っていない。
+- Pixel 7 baseline SHA-256: `99e3183b21fe712b793efd122d1a793dd55ba301d7cd9f778f7d5bbc52b9dcee`。Desktop は変更せず `18130cd6d469df287f7877d6b30f9db1708d244ce6f69b33224a1e504d1a6685` を保持。
+- `pnpm test:visual --config=/tmp/lab-visual-baseline.config.ts` は2件成功。起動中の dev server を既存の Playwright 設定が再利用した最初の比較は両方に差分が出たため、dev server を保持したまま専用の production preview（4322）へ一時設定で接続して検証した。repository の Playwright 設定は変更していない。
+- `pnpm check` 成功。lint / CSS lint / formatting / 型検査（error・warning・hint 0）/ unit・component・metadata・audit gate の59件が成功。計算関数 coverage は lines 97.67%、branches 94.11%。`pnpm build` は4ページ成功。
+- `pnpm audit:check` は sandbox 外で最新 registry 監査を取得して成功。High 3 / Moderate 2 / Low 1 / Critical 0。既知3件の patched_versions は null、承認済み version / 開発依存経路と一致し、例外期限は2026-11-10の日本時間当日末までのまま。
+- 今回の変更は Pixel 7 baseline と本記録のみ。E2E 50件 / accessibility 10件は直前の overlay 修正で成功済み。Storybook build / browser 5件、workflow lint、Lighthouse 9回は前節までの検証結果を引き継ぎ、今回は再実行していない。
+- UI仕様 / Testing Strategy / CHANGELOG は overlay 修正 commit で更新済み。新規 ADR は不要。実装の未解決 error と未承認 baseline 差分はなくなった。
+- GitHub CI / Release workflow は未実行。Windows / macOS 実ブラウザ・実機端末は未確認。正式 version、X/Twitter URL、GitHub settings / 公開判断は引き続き別途確定する。
+- PR / merge / tag / Release / deploy / GitHub settings 変更は行っていない。PR の作成には別途承認が必要。
