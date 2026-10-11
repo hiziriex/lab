@@ -130,3 +130,19 @@ review は device pixel、元の比較は CSS pixel だったため scale を de
 `scripts/audit-exceptions.json` の既知3件は最新監査でも修正版なし。`pnpm audit:check` は成功し、High 3 / Moderate 2 / Low 1 / Critical 0 の生データを表示した。
 今回の変更は baseline と撮影条件・記録のみ。production build は `7a09561` で検証したものを使用している。
 PR / merge / tag / Release / deploy / repository settings は未実施。
+
+
+## mobile section navigation の overlay 修正（2026-10-11）
+
+- mobile / tablet の section navigation を viewport 固定に変更。header 直下 8px、右端 16px に表示し、document flow の縦スペースをなくした。collapsed / expanded の切り替えで page title / 本文を押し下げない。
+- 幅と最大高さを viewport に制限し、高さ不足時は menu 内を scroll 可能にした。native details / summary、anchor / hash、reduced motion を維持。Escape で閉じて summary へ focus を戻し、focus outline は mobile overlay 内に表示する。
+- overlay の高さは anchor / focus 移動用の scroll-padding にのみ反映。Desktop の配置・sidebar collapse は維持した。
+- E2E に 320 / 412 / 768px 幅で本文位置不変、viewport 内への収まり、scroll 追従、Enter / Tab / Escape / focus を追加。5 browser で E2E 50件成功。font / 回路画像を待ってから座標を比較する。
+- accessibility は10件成功。既存の初期結果 fade 中に測定した contrast 失敗を確認し、test は animation.finished を待つようにした。production の色・animation、retry / 検証閾値は変更していない。Pixel 7 の expanded review でも axe violation は0。
+- unit / component は59件成功。`pnpm check` 成功（型検査 error / warning / hint 0）、`pnpm build` 成功（4ページ）。
+- Desktop Chromium の review は baseline と hash が一致。Pixel 7 は collapsed / expanded / 500px scroll 後の viewport 画像を確認した。Linux browser のエミュレーションであり、実機確認は未実施。
+- `pnpm test:visual` は Desktop 成功、Pixel 7 は想定した差分で失敗。比較結果は baseline 1082×5114px → actual 1082×4964px、差分250128 pixels（約5%）。baseline は更新していない。
+- review 画像: `review-artifacts/divider-chromium.png`、`review-artifacts/divider-android.png`（初期 full page）、`review-artifacts/divider-android-collapsed.png`、`review-artifacts/divider-android-expanded.png`、`review-artifacts/divider-android-scrolled.png`。
+- Pixel 7 差分: `test-results/e2e/divider--visual-初期状態-android/divider-diff.png`。baseline の hash は前節の承認済み2枚から変更なし。
+- UI仕様、Testing Strategy、CHANGELOG を更新。architecture の判断は変わらず、新規 ADR は不要。
+- dependency / audit 例外・正式 version・X/Twitter・GitHub settings・Release / deploy設定は変更なし。PR / merge / tag / Release / deploy は未実施。baseline 更新は人間による画像確認と別途承認を待つ。

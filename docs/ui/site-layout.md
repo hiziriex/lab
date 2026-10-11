@@ -60,8 +60,11 @@ Mobile:
 
 - current section name を小さく表示
 - tap で section list 展開
-- ヘッダー直下の専用領域に配置し、入力欄に重ねない
-- 展開時の高さもスクロール余白へ反映する
+- ヘッダー直下付近へ viewport 基準の floating overlay として固定する
+- collapsed / expanded とも document flow に縦スペースを確保せず、本文を押し下げない
+- 320px 幅でも viewport 内に収め、縦方向の不足時は menu 内を scroll 可能にする
+- 展開時の高さは anchor / focus 移動のスクロール余白に反映し、入力操作を妨げない
+- native details / summary の keyboard 操作を維持し、Escape で閉じた後は summary へ focus を戻す。link 選択時は native anchor 移動を維持する
 
 ## 7. Anchor
 

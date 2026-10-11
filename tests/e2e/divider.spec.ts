@@ -69,6 +69,10 @@ test('section nav はクリック時だけ hash を変更', async ({ page }) => 
   await expect(page).toHaveURL(/#input$/);
 });
 test('@a11y 入力・結果・dark・エラー', async ({ page }) => {
+  // 初期結果の fade 中に一時的な opacity を contrast として測らない。
+  await page.locator('table').evaluate(async (element) => {
+    await Promise.all(element.getAnimations().map((animation) => animation.finished));
+  });
   for (const colorScheme of ['light', 'dark'] as const) {
     await page.emulateMedia({ colorScheme });
     await expect(page.locator('.radix-themes')).toHaveClass(new RegExp(colorScheme));
@@ -115,4 +119,66 @@ test('mobile section nav は入力を遮らず、展開後も操作できる', a
   await page.getByRole('link', { name: '01 回路と入力' }).click();
   await expect(nav.locator('details')).not.toHaveAttribute('open');
   await expect(page.getByRole('textbox', { name: '入力電圧 Vin' })).toBeInViewport();
+});
+
+test('mobile overlay の開閉で本文が移動せず、狭い viewport と scroll に追従する', async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  const nav = page.getByRole('navigation', { name: 'ページ内ナビゲーション' });
+  const details = nav.locator('details');
+  const summary = nav.locator('summary');
+  const positions = () =>
+    page
+      .locator('h1, #input, #results, #formula')
+      .evaluateAll((elements) =>
+        elements.map(
+          (element) =>
+            Math.round((element.getBoundingClientRect().top + window.scrollY) * 100) / 100,
+        ),
+      );
+  for (const width of [320, 412, 768]) {
+    await page.setViewportSize({ width, height: 915 });
+    await page.goto('tools/voltage-divider/');
+    await expect(page.getByRole('checkbox', { name: '候補 1 を比較' })).toBeChecked();
+    // font / 回路画像の読み込みによる変化と、overlay 開閉の影響を分離する。
+    await page.evaluate(async () => {
+      await document.fonts.ready;
+      await Promise.all(Array.from(document.images, (image) => image.decode()));
+    });
+    await expect(details).not.toHaveAttribute('open');
+    const before = await positions();
+    const collapsed = await nav.boundingBox();
+    expect(await nav.evaluate((element) => getComputedStyle(element).position)).toBe('fixed');
+    await summary.focus();
+    await page.keyboard.press('Enter');
+    await expect(details).toHaveAttribute('open', '');
+    expect(await positions()).toEqual(before);
+    const expanded = await nav.boundingBox();
+    expect(expanded!.height).toBeGreaterThan(collapsed!.height);
+    expect(expanded!.x).toBeGreaterThanOrEqual(0);
+    expect(expanded!.x + expanded!.width).toBeLessThanOrEqual(width);
+    expect(expanded!.y).toBeGreaterThanOrEqual(56);
+    expect(expanded!.y + expanded!.height).toBeLessThanOrEqual(915);
+    await page.keyboard.press('Tab');
+    await expect(nav.getByRole('link').first()).toBeFocused();
+    await page.keyboard.press('Escape');
+    await expect(details).not.toHaveAttribute('open');
+    await expect(summary).toBeFocused();
+    expect(await positions()).toEqual(before);
+    await page.evaluate(() => window.scrollTo(0, 500));
+    await expect.poll(async () => (await nav.boundingBox())!.y).toBe(collapsed!.y);
+    await summary.press('Enter');
+    expect(await positions()).toEqual(before);
+    await nav.getByRole('link', { name: '01 回路と入力' }).click();
+    await expect(details).not.toHaveAttribute('open');
+    expect(
+      await nav
+        .locator('details > div')
+        .evaluate((element) => element.contains(document.activeElement)),
+    ).toBe(false);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true,
+    );
+  }
 });

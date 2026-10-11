@@ -19,6 +19,8 @@
 
 ### Fixed
 
+- mobile section navigation を viewport 固定の overlay に変更し、開閉による本文の上下移動を解消。
+
 - 日本語向け system font stack をページ・Radix 入力で共通化し、Linux browser / CI で Noto の存在と実描画フォントを検証。
 
 - mobile のページ内ナビゲーションをヘッダー直下へ移し、分圧電流の単位入力との重なりを解消。

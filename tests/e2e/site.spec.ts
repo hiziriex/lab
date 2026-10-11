@@ -109,4 +109,24 @@ test('@review 承認用画像（baseline は変更しない）', async ({ page, 
     }),
     contentType: 'image/png',
   });
+  if (testInfo.project.name === 'android') {
+    const nav = page.getByRole('navigation', { name: 'ページ内ナビゲーション' });
+    const capture = async (state: string) => {
+      await testInfo.attach(`divider-${state}-review`, {
+        body: await page.screenshot({
+          path: `review-artifacts/divider-android-${state}.png`,
+          animations: 'disabled',
+          scale: 'device',
+        }),
+        contentType: 'image/png',
+      });
+    };
+    await capture('collapsed');
+    await nav.locator('summary').click();
+    await capture('expanded');
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+    await nav.locator('summary').press('Escape');
+    await page.evaluate(() => window.scrollTo(0, 500));
+    await capture('scrolled');
+  }
 });

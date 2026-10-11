@@ -69,6 +69,9 @@ Linux Chromium / Pixel 7 は CDP から heading / label の実描画フォント
 フォント検証結果は Playwright attachment と `review-artifacts/*-fonts.json` に保存し、CI の browser-results artifact に確認画像と共に含める。Pixel 7 は Linux 上のエミュレーションで、Android 実機のフォントではない。
 review / 画像比較とも device pixel のスケールを明示し、reduced motion は初回ページ読み込み前に設定する。新しい画像は人間確認まで baseline に追加・更新しない。
 
+mobile section navigation は 320 / 412 / 768px 幅で、開閉前後の page title / 各 section の位置、viewport 内への収まり、scroll 追従、keyboard 開閉、Escape の focus 復帰を E2E で確認する。font / 回路画像の読み込み完了後に比較し、browser の座標丸め差は 0.01px 単位で扱う。
+Pixel 7 の review は初期 full page に加え、collapsed / expanded / scrolled の viewport 画像を保存し、expanded 状態でも axe を確認する。
+
 ## 6. Retry
 
 - Playwright CI: 1 retry

@@ -84,7 +84,8 @@ Mobile:
 
 - current section name
 - tap to expand
-- ヘッダー直下の専用領域に配置し、入力操作を妨げない
+- ヘッダー直下付近へ viewport 基準の floating overlay として固定し、scroll に追従する
+- document flow に縦スペースを確保せず、開閉しても page title / 本文の位置を変えない
 
 Section link click:
 
