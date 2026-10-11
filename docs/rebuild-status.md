@@ -3,6 +3,14 @@
 確認日: 2026-10-11。作業ディレクトリ: `/home/hiziriex/work/lab`。
 作業ブランチ: `chore/rebuild-lab`。
 
+## 初回 release workflow の setup 修正（2026-10-11）
+
+- PR #8 は `fb58faa` に Squash merge済み。PR / main CI は全5 job成功。
+- 初回 `v0.1.0` の Release run 38124671717 は validation / checks 全て成功したが、release job の setup-node が pnpm を見つけられず失敗。GitHub Release 未作成、Pages deploy は skip。
+- 人間承認に従い、release job の setup-node に `package-manager-cache: false` を指定。依存をインストールしない job の不要な自動 cache を無効化する。
+- `pnpm check`（型検査指摘0、59件成功）、site build（4ページ）、release metadata 検証、actionlint 1.7.12（ShellCheck連携）が成功。
+- release 仕様・security policy・baseline の変更はなく、新規 ADR は不要。PR / main CI成功後、未公開tagを修正済みmainへ付け直すことは人間承認済み。
+
 ## 引き継ぎと保存
 
 前回の未コミット変更を引き継ぎ、仕様書と実装を確認した。
