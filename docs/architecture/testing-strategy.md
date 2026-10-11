@@ -62,6 +62,13 @@ baseline:
 baseline image は Git 管理。
 baseline update は人間確認必須。
 
+Linux の E2E / Storybook / Lighthouse は OS の `fonts-noto-cjk` を導入し、`scripts/check-japanese-fonts.sh` で `Noto Sans CJK JP` を確認する。
+Playwright は global setup で確認し、不在ならテスト開始前に失敗する。CI の browsers / metrics job は browser dependencies 導入後に OS フォントを明示的に導入する。
+review 撮影は `document.fonts.ready` を待ち、HTML の `lang="ja"` と heading / input の共通 stack を検証する。
+Linux Chromium / Pixel 7 は CDP から heading / label の実描画フォントを取得し、日本語向け Noto が local font として使用されたことを確認する。
+フォント検証結果は Playwright attachment と `review-artifacts/*-fonts.json` に保存し、CI の browser-results artifact に確認画像と共に含める。Pixel 7 は Linux 上のエミュレーションで、Android 実機のフォントではない。
+新しい画像は両方の人間確認まで baseline に追加・更新しない。
+
 ## 6. Retry
 
 - Playwright CI: 1 retry

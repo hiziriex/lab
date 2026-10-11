@@ -1,6 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
+  globalSetup: './tests/font-setup.ts',
   testDir: './tests/storybook',
   outputDir: './test-results/storybook',
   forbidOnly: !!process.env.CI,

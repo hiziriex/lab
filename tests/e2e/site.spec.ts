@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-import { mkdir } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 
 test('静的ページ、公開パス、メタデータ', async ({ page }) => {
   for (const [route, title] of [
@@ -64,11 +64,42 @@ test('候補表を横スクロールしても順位と抵抗を表示', async ({
   }
 });
 
-test('@review 承認用画像（baseline は変更しない）', async ({ page }, testInfo) => {
+test('@review 承認用画像（baseline は変更しない）', async ({ page, browserName }, testInfo) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('tools/voltage-divider/');
   await expect(page.getByRole('checkbox', { name: '候補 1 を比較' })).toBeChecked();
+  await expect(page.locator('html')).toHaveAttribute('lang', 'ja');
+  for (const target of [page.locator('h1'), page.getByRole('textbox', { name: '分圧電流 Idiv' })])
+    expect(await target.evaluate((element) => getComputedStyle(element).fontFamily)).toContain(
+      'Noto Sans CJK JP',
+    );
+  await page.evaluate(() => document.fonts.ready);
   await mkdir('review-artifacts', { recursive: true });
+  if (browserName === 'chromium' && process.platform === 'linux') {
+    const session = await page.context().newCDPSession(page);
+    await session.send('DOM.enable');
+    await session.send('CSS.enable');
+    const { root } = await session.send('DOM.getDocument');
+    for (const selector of ['h1', 'label']) {
+      const { nodeId } = await session.send('DOM.querySelector', { nodeId: root.nodeId, selector });
+      const { fonts } = await session.send('CSS.getPlatformFontsForNode', { nodeId });
+      expect(
+        fonts.some(
+          (font) =>
+            font.familyName === 'Noto Sans CJK JP' && !font.isCustomFont && font.glyphCount > 0,
+        ),
+      ).toBe(true);
+      await writeFile(
+        `review-artifacts/divider-${testInfo.project.name}-${selector}-fonts.json`,
+        JSON.stringify(fonts, null, 2) + '\n',
+      );
+      await testInfo.attach(`system-font-${selector}`, {
+        body: JSON.stringify(fonts, null, 2),
+        contentType: 'application/json',
+      });
+    }
+    await session.detach();
+  }
   await testInfo.attach('divider-review', {
     body: await page.screenshot({
       path: `review-artifacts/divider-${testInfo.project.name}.png`,

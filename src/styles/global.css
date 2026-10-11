@@ -1,7 +1,10 @@
 :root {
-  font-family: system-ui, sans-serif;
+  font-family: var(--font-sans);
   color-scheme: light dark;
 
+  --font-sans:
+    'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic UI', 'Yu Gothic', meiryo,
+    'Noto Sans CJK JP', 'Noto Sans JP', system-ui, sans-serif;
   --page: #f8fafc;
   --panel: #fff;
   --ink: #202d3d;
@@ -91,7 +94,9 @@ html {
 }
 
 .radix-themes[data-is-root-theme='true'] {
-  font-family: system-ui, sans-serif;
+  --default-font-family: var(--font-sans);
+
+  font-family: var(--font-sans);
   background: transparent;
   min-height: 0;
 }

@@ -28,6 +28,7 @@ WSL 側:
 - Node.js 24 LTS
 - pnpm
 - build-essential
+- fonts-noto-cjk（Linux browser 検証用の日本語 system font）
 - Codex
 
 GitHub CLI は WSL 側で認証済みとする。
@@ -68,3 +69,9 @@ Windows 側 browser から `localhost` へアクセスして確認する。
 
 GitHub login 等の人間操作を無理に自動化しない。
 README に setup 手順を記載する。
+
+## 8. 日本語フォント
+
+Ubuntu / WSL は `sudo apt-get update` と `sudo apt-get install -y fonts-noto-cjk` で導入し、`bash scripts/check-japanese-fonts.sh` で確認する。
+sudo を使えない環境では、同じ OS package の NotoSansCJK-Regular / Bold をユーザー用 system font 領域へ導入して fontconfig に登録してもよい。
+フォントは repository / build /公開サイトへコピーしない。OS のフォントとしてのみ使用する。

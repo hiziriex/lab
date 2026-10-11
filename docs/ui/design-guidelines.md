@@ -41,7 +41,10 @@ Layout は CSS Modules。
 
 OS `prefers-color-scheme` に追従。
 初期版では manual theme switch / persistence なし。
-System font。
+System font。HTML は `lang="ja"`。
+共通の `--font-sans` は Hiragino Sans / Hiragino Kaku Gothic ProN（macOS）、Yu Gothic UI / Yu Gothic / Meiryo（Windows）、Noto Sans CJK JP / Noto Sans JP（Linux 等）、system-ui / sans-serif の順に fallback する。
+日本語向けの family を generic family より先に明示し、Radix の `--default-font-family` と入力欄にも適用する。
+日本語 Web font の導入・配信は行わない。
 
 ## 4. Page heading
 

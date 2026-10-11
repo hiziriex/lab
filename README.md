@@ -13,8 +13,13 @@ npm install --global pnpm@12.10.1
 gh auth login --hostname github.com --git-protocol https --web
 bash scripts/setup-dev.sh
 pnpm exec playwright install --with-deps
+sudo apt-get update
+sudo apt-get install -y fonts-noto-cjk
+bash scripts/check-japanese-fonts.sh
 pnpm dev
 ```
+
+Linux のブラウザ検証は日本語 system font（Noto Sans CJK JP）を必須とし、不在時は開始前に失敗します。サイトにはフォントを配信しません。
 
 Windows のブラウザから `http://localhost:4321/lab/` にアクセスします。
 

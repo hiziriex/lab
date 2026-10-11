@@ -1,5 +1,5 @@
 import { chromium } from '@playwright/test';
-import { spawn } from 'node:child_process';
+import { spawn, execFileSync } from 'node:child_process';
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
@@ -8,6 +8,8 @@ import { setTimeout as delay } from 'node:timers/promises';
 
 // WSL を Windows Chrome とみなす chrome-launcher の自動起動を避ける。
 // 導入済みの Playwright Chromium を起動し、LHCI はそのポートへ接続する。
+if (process.platform === 'linux')
+  execFileSync('bash', ['scripts/check-japanese-fonts.sh'], { stdio: 'inherit' });
 const require = createRequire(import.meta.url);
 const profile = await mkdtemp(path.join(tmpdir(), 'lab-lighthouse-'));
 let context;

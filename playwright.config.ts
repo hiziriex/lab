@@ -1,5 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
+  globalSetup: './tests/font-setup.ts',
   testDir: './tests/e2e',
   outputDir: './test-results/e2e',
   fullyParallel: true,

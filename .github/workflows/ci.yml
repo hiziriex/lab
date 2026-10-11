@@ -109,6 +109,8 @@ jobs:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
       - run: pnpm exec playwright install --with-deps
+      - name: Japanese system fonts
+        run: sudo apt-get update && sudo apt-get install -y fonts-noto-cjk && bash scripts/check-japanese-fonts.sh
       - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
         with:
           name: storybook
@@ -124,6 +126,7 @@ jobs:
           path: |
             playwright-report/
             test-results/
+            review-artifacts/
           retention-days: 14
   metrics:
     needs: build
@@ -145,6 +148,8 @@ jobs:
           name: site-dist
           path: dist/
       - run: pnpm exec playwright install --with-deps chromium
+      - name: Japanese system fonts
+        run: sudo apt-get update && sudo apt-get install -y fonts-noto-cjk && bash scripts/check-japanese-fonts.sh
       - name: Lighthouse
         run: pnpm lighthouse
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
