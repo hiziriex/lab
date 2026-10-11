@@ -28,7 +28,8 @@
     "prepare": "husky",
     "bundle": "node scripts/bundle-report.mjs",
     "lighthouse": "node scripts/lighthouse.mjs",
-    "optimize:svg": "svgo -f public/circuits"
+    "optimize:svg": "svgo -f public/circuits",
+    "audit:check": "node scripts/dependency-audit.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^8.0.3",
