@@ -1,0 +1,118 @@
+<nav aria-label="ページ内ナビゲーション" class="section-nav">
+  <details>
+    <summary>
+      現在: <span id="current-section">回路と入力</span>
+    </summary>
+    <div>
+      <a href="#input">01 回路と入力</a>
+      <a href="#results">02 抵抗候補</a>
+      <a href="#formula">03 計算式</a>
+    </div>
+  </details>
+</nav>
+<style>
+  .section-nav {
+    position: fixed;
+    top: calc(var(--header-height, 56px) + 8px);
+    right: 1rem;
+    width: max-content;
+    max-width: calc(100% - 2rem);
+    margin: 0;
+    max-height: calc(100dvh - var(--header-height, 56px) - 24px);
+    overflow-y: auto;
+    z-index: 5;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--panel);
+    font-size: 0.8rem;
+    box-shadow: 0 2px 10px #0001;
+  }
+  summary {
+    cursor: pointer;
+    padding: 0.6rem 1rem;
+  }
+  @media (width < 1024px) {
+    summary:focus-visible,
+    .section-nav a:focus-visible {
+      outline-offset: -3px;
+    }
+  }
+  .section-nav a {
+    display: block;
+    padding: 0.6rem 1rem;
+  }
+  @media (width >= 1024px) {
+    .section-nav {
+      position: fixed;
+      top: auto;
+      bottom: 1rem;
+      max-height: none;
+      overflow: visible;
+      margin: 0;
+      left: 12px;
+      right: auto;
+      width: 176px;
+    }
+    :global(body[data-nav-collapsed='true']) .section-nav {
+      position: static;
+      width: max-content;
+      margin-top: 1rem;
+    }
+    summary {
+      display: none;
+    }
+    details > div {
+      display: grid !important;
+    }
+  }
+</style>
+<script>
+  const nav = document.querySelector<HTMLElement>('.section-nav')!;
+  const topbar = nav.parentElement!;
+  const details = nav.querySelector<HTMLDetailsElement>('details')!;
+  const summary = details.querySelector<HTMLElement>('summary')!;
+  const media = matchMedia('(min-width: 1024px)');
+  // overlay の高さは本文の余白ではなく、anchor / focus 移動のスクロール余白に使う。
+  const resizeObserver = new ResizeObserver(() => {
+    document.documentElement.style.setProperty('--header-height', `${topbar.offsetHeight}px`);
+    document.documentElement.style.setProperty(
+      '--topbar-height',
+      `${topbar.offsetHeight + (media.matches ? 0 : nav.offsetHeight + 8)}px`,
+    );
+  });
+  resizeObserver.observe(topbar);
+  resizeObserver.observe(nav);
+  const update = () => {
+    details.open = media.matches;
+  };
+  update();
+  media.addEventListener('change', update);
+  const labels: Record<string, string> = {
+    input: '回路と入力',
+    results: '抵抗候補',
+    formula: '計算式',
+  };
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries)
+        if (entry.isIntersecting)
+          document.querySelector('#current-section')!.textContent = labels[entry.target.id] ?? '';
+    },
+    { rootMargin: '-10% 0px -50% 0px' },
+  );
+  for (const id of Object.keys(labels)) {
+    const section = document.getElementById(id);
+    if (section) observer.observe(section);
+  }
+  details.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !media.matches && details.open) {
+      details.open = false;
+      summary.focus();
+    }
+  });
+  details.querySelectorAll('a').forEach((a) =>
+    a.addEventListener('click', () => {
+      if (!media.matches) details.open = false;
+    }),
+  );
+</script>

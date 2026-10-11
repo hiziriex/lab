@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../lib/site';
+import { ExternalLink } from 'lucide-react';
+---
+
+<BaseLayout title="About">
+  <h2>サイトの目的</h2>
+  <p>{site.description}</p>
+  <p>
+    作者: {site.author}{' '}
+    {site.twitterUrl && (
+      <a href={site.twitterUrl} target="_blank" rel="noopener noreferrer">
+        X / Twitter <ExternalLink size={14} />
+      </a>
+    )}
+  </p>
+  <p>現在のバージョン: {site.version}</p>
+  <h2>ライセンス</h2>
+  <p>
+    ソースコードは MIT License
+    です。記事・説明文・図・回路図・画像等の無断転載・再配布を禁止します。法律上認められる引用は妨げません。
+  </p>
+  <h2>プライバシー</h2>
+  <p>
+    ログイン・アクセス解析・個人情報の収集は行いません。Cookie
+    を積極的に利用せず、計算入力は保存しません。
+  </p>
+  <h2>計算結果について</h2>
+  <p>計算結果は設計判断の補助です。最終的な設計・安全性・適合性は利用者が確認してください。</p>
+  <p>ソースコード、更新履歴、問い合わせ窓口は下記の GitHub リンクをご利用ください。</p>
+</BaseLayout>

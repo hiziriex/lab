@@ -1,73 +1,43 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import VoltageDivider from '../../components/tools/VoltageDivider';
+import SectionNavigation from '../../components/layout/SectionNavigation.astro';
+import katex from 'katex';
+import 'katex/dist/katex.min.css';
+const formula = katex.renderToString(
+  'V_{\\mathrm{out}} = V_{\\mathrm{in}} \\frac{R_2}{R_1 + R_2}',
+  { throwOnError: true, output: 'htmlAndMathml' },
+);
 ---
-<BaseLayout title="抵抗分圧計算 | hiziriex lab">
-  <div class="page-tool">
-    <div class="container-tool tool-page">
-      <section class="tool-header">
-        <h2>抵抗分圧計算</h2>
-        <p class="tool-description">
-          入力電圧と目標出力電圧から抵抗分圧の値を計算するツールです。
-        </p>
-      </section>
 
-      <section class="card">
-        <div class="block-header">
-          <h3>回路図</h3>
-          <button class="button button-outline">閉じる</button>
-        </div>
-        <div class="placeholder-box">[ 回路図が入るエリア ]</div>
-      </section>
-
-      <section class="card">
-        <div class="block-header">
-          <h3>数式</h3>
-          <button class="button button-outline">開く</button>
-        </div>
-        <div class="placeholder-box">[ KaTeXで数式を表示するエリア ]</div>
-      </section>
-
-      <section class="card">
-        <h3>入力</h3>
-
-        <div class="form-grid">
-          <div class="form-field">
-            <label class="form-label">入力電圧 Vin</label>
-            <input class="input" type="text" placeholder="例: 12" />
-            <p class="field-hint">SI接頭辞対応例: 1k, 10u, 220n</p>
-          </div>
-
-          <div class="form-field">
-            <label class="form-label">目標出力電圧 Vout</label>
-            <input class="input" type="text" placeholder="例: 5" />
-            <p class="field-hint">例: 3.3 / 5 / 1.8</p>
-          </div>
-
-          <div class="form-field">
-            <label class="form-label">基準抵抗 R2</label>
-            <input class="input" type="text" placeholder="例: 10k" />
-            <p class="field-hint">例: 4.7k, 10k, 100k</p>
-          </div>
-        </div>
-
-        <div class="button-row">
-          <button class="button button-primary">計算</button>
-          <button class="button button-outline">リセット</button>
-          <button class="button button-outline">条件URLをコピー</button>
-        </div>
-      </section>
-
-      <section class="card">
-        <h3>結果一覧</h3>
-        <table class="result-table">
-          <tbody>
-            <tr><td>R1</td><td>14.0 kΩ</td></tr>
-            <tr><td>R2</td><td>10.0 kΩ</td></tr>
-            <tr><td>計算出力電圧</td><td>5.00 V</td></tr>
-            <tr><td>誤差</td><td>0.00 %</td></tr>
-          </tbody>
-        </table>
-      </section>
-    </div>
-  </div>
+<BaseLayout
+  title="分圧抵抗計算"
+  description="入力電圧と目標電圧から、E12 / E24 系列の抵抗の組み合わせを比較します。"
+>
+  <VoltageDivider client:load />
+  <noscript>
+    <p>計算ツールを操作するには JavaScript を有効にしてください。</p>
+  </noscript>
+  <section id="formula">
+    <h2>03 計算式と候補の選び方</h2>
+    <div set:html={formula} />
+    <p>
+      指定した抵抗系列から、目標Voutとの誤差が小さい組み合わせを探索します。分圧電流指定時は、その値を目安に抵抗値の桁を調整します。
+    </p>
+    <p>負荷電流・抵抗公差・温度変化は含みません。実回路での確認を行ってください。</p>
+  </section>
+  <SectionNavigation slot="section-navigation" />
 </BaseLayout>
+<style>
+  #formula {
+    scroll-margin-top: 5rem;
+    padding: 1.5rem;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--panel);
+  }
+  #formula p {
+    font-size: 0.9rem;
+    margin-top: 1rem;
+  }
+</style>

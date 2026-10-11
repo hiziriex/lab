@@ -1,69 +1,158 @@
 ---
-import "../styles/theme.css";
-import "../styles/base.css";
-import "../styles/layout.css";
-import "../styles/components.css";
-import "../styles/markdown.css";
-
+import '../styles/global.css';
+import styles from './BaseLayout.module.css';
+import { site, withBase } from '../lib/site';
+import { Menu, ExternalLink } from 'lucide-react';
 interface Props {
-  title: string;
+  title?: string;
+  description?: string;
+  canonicalPath?: string;
 }
-
-const { title } = Astro.props;
-const base = import.meta.env.BASE_URL;
+const { title, description = site.description, canonicalPath = Astro.url.pathname } = Astro.props;
+const pageTitle = title ? `${title} | ${site.name}` : site.name;
+const links = [
+  { href: withBase(), text: 'ホーム' },
+  { href: withBase('tools/voltage-divider/'), text: '分圧抵抗計算' },
+  { href: withBase('about/'), text: 'About' },
+];
 ---
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title}</title>
-
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
-    />
-
-    <script
-      defer
-      src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <script
-      defer
-      src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
-    <script is:inline>
-      document.addEventListener("DOMContentLoaded", () => {
-        if (window.renderMathInElement) {
-          window.renderMathInElement(document.body, {
-            delimiters: [
-              { left: "$$", right: "$$", display: true },
-              { left: "$", right: "$", display: false }
-            ]
-          });
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(canonicalPath, Astro.site)} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={new URL(canonicalPath, Astro.site)} />
+    <meta property="og:site_name" content={site.name} />
+    <link rel="icon" type="image/svg+xml" href={withBase('favicon.svg')} />
+    <link rel="manifest" href={withBase('site.webmanifest')} />
+  </head>
+  <body>
+    <a class={styles.skip} href="#main">
+      本文へスキップ
+    </a>
+    <div class={styles.topbar}>
+      <header class={styles.header}>
+        <button
+          id="navigation-toggle"
+          class={styles.toggle}
+          aria-label="ナビゲーションを開閉"
+          aria-controls="desktop-navigation"
+          aria-expanded="true"
+        >
+          <Menu size={20} />
+        </button>
+        <a class={styles.brand} href={withBase()}>
+          <span class={styles.mark}>HL</span>
+          {site.name}
+        </a>
+      </header>
+      <slot name="section-navigation" />
+    </div>
+    <div class={styles.shell}>
+      <aside id="desktop-navigation" class={styles.sidebar}>
+        <nav aria-label="メインナビゲーション">
+          <h2>WORKSPACE</h2>
+          {links.map((link) => (
+            <a
+              href={link.href}
+              aria-current={Astro.url.pathname === link.href ? 'page' : undefined}
+            >
+              {link.text}
+            </a>
+          ))}
+        </nav>
+      </aside>
+      <div class={styles.content}>
+        <main id="main">
+          <nav class={styles.breadcrumb} aria-label="パンくず">
+            {title ? (
+              <>
+                <a href={withBase()}>ホーム</a> / {title}
+              </>
+            ) : (
+              'WORKSPACE'
+            )}
+          </nav>
+          <h1>{title ?? site.name}</h1>
+          <p class={styles.intro}>{description}</p>
+          <slot />
+        </main>
+        <footer class={styles.footer}>
+          <span>© ひじり · v{site.version}</span>
+          <a href={site.github} target="_blank" rel="noopener noreferrer">
+            <img src={withBase('github.svg')} alt="" width="14" height="14" />
+            hiziriex/lab
+            <ExternalLink size={12} />
+          </a>
+          <a href={`${site.github}/releases`} target="_blank" rel="noopener noreferrer">
+            更新履歴
+            <ExternalLink size={12} />
+          </a>
+          <a
+            href={`${site.github}/issues/new?template=bug.yml`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            問題を報告
+            <ExternalLink size={12} />
+          </a>
+        </footer>
+      </div>
+    </div>
+    <dialog id="navigation-drawer" class={styles.drawer} aria-label="ナビゲーション">
+      <button class={styles.toggle} id="navigation-close" aria-label="ナビゲーションを閉じる">
+        ×
+      </button>
+      <nav aria-label="モバイルナビゲーション">
+        {links.map((link) => (
+          <a href={link.href}>{link.text}</a>
+        ))}
+      </nav>
+    </dialog>
+    <script>
+      const toggle = document.querySelector<HTMLButtonElement>('#navigation-toggle')!;
+      const drawer = document.querySelector<HTMLDialogElement>('#navigation-drawer')!;
+      const media = matchMedia('(min-width: 1024px)');
+      function sync() {
+        if (drawer.open) drawer.close();
+        toggle.setAttribute(
+          'aria-expanded',
+          String(media.matches && document.body.dataset.navCollapsed !== 'true'),
+        );
+        toggle.setAttribute(
+          'aria-controls',
+          media.matches ? 'desktop-navigation' : 'navigation-drawer',
+        );
+      }
+      sync();
+      media.addEventListener('change', sync);
+      toggle.addEventListener('click', () => {
+        if (media.matches) {
+          document.body.dataset.navCollapsed = String(
+            document.body.dataset.navCollapsed !== 'true',
+          );
+          sync();
+        } else {
+          drawer.showModal();
+          toggle.setAttribute('aria-expanded', 'true');
         }
       });
+      document.querySelector('#navigation-close')!.addEventListener('click', () => drawer.close());
+      drawer.addEventListener('close', () => {
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.focus();
+      });
+      drawer.addEventListener('click', (event) => {
+        if (event.target === drawer && event.clientX > drawer.getBoundingClientRect().right)
+          drawer.close();
+      });
     </script>
-  </head>
-
-  <body>
-    <header class="site-header">
-      <div class="header-inner">
-        <div class="site-brand">
-          <a class="site-title-link" href={base}>
-            <h1 class="site-title">hiziriex lab</h1>
-          </a>
-          <p class="site-subtitle">技術計算ツールと備忘録</p>
-        </div>
-
-        <nav class="main-nav">
-          <a href={base}>TOP</a>
-          <a href={`${base}/tools/`}>計算ツール</a>
-          <a href={`${base}/articles/`}>技術記事</a>
-        </nav>
-      </div>
-    </header>
-
-    <main class="page-main">
-      <slot />
-    </main>
   </body>
 </html>

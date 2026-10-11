@@ -1,0 +1,18 @@
+name: 改善・リファクタリング
+description: 改善・リファクタリングを記録します
+title: '[improvement] '
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: 内容・目的
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 再現手順・期待する動作
+  - type: textarea
+    id: environment
+    attributes:
+      label: 環境・補足

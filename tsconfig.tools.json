@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "tests/**/*.ts",
+    "tests/**/*.tsx",
+    "*.config.ts",
+    ".storybook/**/*.ts",
+    ".storybook/**/*.tsx"
+  ],
+  "compilerOptions": { "types": ["node", "vite/client"] }
+}

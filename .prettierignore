@@ -1,0 +1,14 @@
+node_modules
+dist
+.astro
+coverage
+storybook-static
+playwright-report
+test-results
+.lighthouseci
+pnpm-lock.yaml
+AGENTS.md
+README-SPEC.md
+codex-rebuild-prompt.md
+docs
+*.drawio

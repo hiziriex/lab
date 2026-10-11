@@ -1,0 +1,60 @@
+{
+  "expiresAt": "2026-11-10T23:59:59.999+09:00",
+  "advisories": {
+    "GHSA-jmr9-qjv8-65gv": {
+      "module": "extract-zip",
+      "findings": [
+        {
+          "version": "2.0.1",
+          "paths": [
+            ".>@lhci/cli>@lhci/utils>lighthouse>puppeteer-core>@puppeteer/browsers>extract-zip",
+            ".>@lhci/cli>lighthouse>puppeteer-core>@puppeteer/browsers>extract-zip"
+          ],
+          "dev": true,
+          "optional": false,
+          "bundled": false
+        }
+      ]
+    },
+    "GHSA-7pqw-9j4j-h8q3": {
+      "module": "extract-zip",
+      "findings": [
+        {
+          "version": "2.0.1",
+          "paths": [
+            ".>@lhci/cli>@lhci/utils>lighthouse>puppeteer-core>@puppeteer/browsers>extract-zip",
+            ".>@lhci/cli>lighthouse>puppeteer-core>@puppeteer/browsers>extract-zip"
+          ],
+          "dev": true,
+          "optional": false,
+          "bundled": false
+        }
+      ]
+    },
+    "GHSA-vfj7-8cjw-p6xm": {
+      "module": "braces",
+      "findings": [
+        {
+          "version": "3.0.3",
+          "paths": [
+            ".>stylelint>micromatch>braces",
+            ".>stylelint>fast-glob>micromatch>braces",
+            ".>stylelint>globby>fast-glob>micromatch>braces",
+            ".>stylelint>globby>micromatch>braces",
+            ".>stylelint-config-standard>stylelint>micromatch>braces",
+            ".>stylelint-config-standard>stylelint>fast-glob>micromatch>braces",
+            ".>stylelint-config-standard>stylelint>globby>fast-glob>micromatch>braces",
+            ".>stylelint-config-standard>stylelint>globby>micromatch>braces",
+            ".>stylelint-config-standard>stylelint-config-recommended>stylelint>micromatch>braces",
+            ".>stylelint-config-standard>stylelint-config-recommended>stylelint>fast-glob>micromatch>braces",
+            ".>stylelint-config-standard>stylelint-config-recommended>stylelint>globby>fast-glob>micromatch>braces",
+            ".>stylelint-config-standard>stylelint-config-recommended>stylelint>globby>micromatch>braces"
+          ],
+          "dev": true,
+          "optional": false,
+          "bundled": false
+        }
+      ]
+    }
+  }
+}

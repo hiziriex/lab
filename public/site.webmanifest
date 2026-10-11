@@ -1,0 +1,7 @@
+{
+  "name": "Hiziriex Lab",
+  "short_name": "Hiziriex Lab",
+  "start_url": "/lab/",
+  "display": "browser",
+  "icons": [{ "src": "/lab/favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}

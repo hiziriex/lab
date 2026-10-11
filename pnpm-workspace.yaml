@@ -1,0 +1,6 @@
+allowBuilds:
+  esbuild: true
+  sharp: true
+overrides:
+  tmp@<0.2.7: 0.2.7
+  basic-ftp@<6.2.1: 6.2.1

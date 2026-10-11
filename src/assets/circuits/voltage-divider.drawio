@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net">
+  <diagram name="分圧抵抗">
+    <mxGraphModel page="1" pageWidth="220" pageHeight="250">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="R1" value="" style="rounded=0;fillColor=none;strokeColor=#23384e;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="80" y="45" width="20" height="45" />
+        </mxCell>
+        <mxCell id="R2" value="" style="rounded=0;fillColor=none;strokeColor=#23384e;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="80" y="140" width="20" height="45" />
+        </mxCell>
+        <mxCell id="vin" value="Vin" style="text;html=0;strokeColor=none;fillColor=none;fontColor=#23384e;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="70" y="0" width="45" height="25" />
+        </mxCell>
+        <mxCell id="r1label" value="R1" style="text;html=0;strokeColor=none;fillColor=none;fontColor=#23384e;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="108" y="52" width="35" height="25" />
+        </mxCell>
+        <mxCell id="r2label" value="R2" style="text;html=0;strokeColor=none;fillColor=none;fontColor=#23384e;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="108" y="147" width="35" height="25" />
+        </mxCell>
+        <mxCell id="vout" value="Vout" style="text;html=0;strokeColor=none;fillColor=none;fontColor=#23384e;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="145" y="95" width="50" height="25" />
+        </mxCell>
+        <mxCell id="current" value="Idiv" style="text;html=0;strokeColor=none;fillColor=none;fontColor=#23384e;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="5" y="90" width="40" height="25" />
+        </mxCell>
+        <mxCell id="ground" value="GND" style="text;html=0;strokeColor=none;fillColor=none;fontColor=#23384e;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="110" y="210" width="50" height="25" />
+        </mxCell>
+        <mxCell id="wire0" style="endArrow=none;strokeColor=#23384e;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="90" y="25" />
+            <mxPoint as="targetPoint" x="90" y="45" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wire1" style="endArrow=none;strokeColor=#23384e;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="90" y="90" />
+            <mxPoint as="targetPoint" x="90" y="140" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wire2" style="endArrow=none;strokeColor=#23384e;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="90" y="185" />
+            <mxPoint as="targetPoint" x="90" y="215" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wire3" style="endArrow=none;strokeColor=#23384e;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="90" y="125" />
+            <mxPoint as="targetPoint" x="155" y="125" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wire4" style="endArrow=none;strokeColor=#23384e;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="70" y="215" />
+            <mxPoint as="targetPoint" x="110" y="215" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wire5" style="endArrow=none;strokeColor=#23384e;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="78" y="222" />
+            <mxPoint as="targetPoint" x="102" y="222" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wire6" style="endArrow=none;strokeColor=#23384e;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="85" y="229" />
+            <mxPoint as="targetPoint" x="95" y="229" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="current-arrow" style="endArrow=open;strokeColor=#23384e;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="45" y="50" />
+            <mxPoint as="targetPoint" x="45" y="175" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="junction" value="" style="ellipse;fillColor=#23384e;strokeColor=#23384e;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="87" y="122" width="6" height="6" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
