@@ -47,6 +47,9 @@ test('CSP と runtime error、ページ幅、ナビゲーション', async ({ pa
   await expect(page.getByRole('checkbox', { name: '候補 1 を比較' })).toBeChecked();
   expect(errors).toEqual([]);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  const results = await page.locator('#results').boundingBox();
+  const formula = await page.locator('#formula').boundingBox();
+  expect(formula!.y - (results!.y + results!.height)).toBeLessThan(100);
   await page.getByRole('button', { name: 'ナビゲーションを開閉' }).click();
   if (isMobile) {
     await expect(page.getByRole('dialog')).toBeVisible();

@@ -15,3 +15,11 @@
 ### Removed
 
 - 旧実装のページ・デザイン試作。旧 HEAD は chore/backup-before-rebuild に保持。
+
+### Fixed
+
+- TypeScript 6.0.x の互換構成と、test environment の ResizeObserver 補完。
+- WSL で導入済み Chromium を使用する Lighthouse runner。
+- 404 の canonical / OGP URL と Release の CHANGELOG section 検証。
+- commit hook の自動 stash を無効化し、検証結果の保存先を分離。
+- Radix / KaTeX の CSS 二重読み込みと Island の不要な画面高さの余白を解消。

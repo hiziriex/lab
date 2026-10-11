@@ -109,7 +109,14 @@ jobs:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
       - run: pnpm exec playwright install --with-deps
-      - run: pnpm test:e2e && pnpm test:a11y && pnpm test:visual
+      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
+        with:
+          name: storybook
+          path: storybook-static/
+      - run: pnpm test:e2e
+      - run: pnpm test:a11y
+      - run: pnpm test:storybook
+      - run: pnpm test:visual
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
@@ -139,9 +146,7 @@ jobs:
           path: dist/
       - run: pnpm exec playwright install --with-deps chromium
       - name: Lighthouse
-        run: |
-          export CHROME_PATH="$(node -p 'require("playwright").chromium.executablePath()')"
-          pnpm lighthouse
+        run: pnpm lighthouse
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         if: github.event_name == 'pull_request'
         with:

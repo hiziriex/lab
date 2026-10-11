@@ -1,6 +1,3 @@
-@import url('@radix-ui/themes/styles.css');
-@import url('katex/dist/katex.min.css');
-
 :root {
   font-family: system-ui, sans-serif;
   color-scheme: light dark;
@@ -93,9 +90,10 @@ html {
   scroll-padding-top: 5rem;
 }
 
-.radix-themes {
+.radix-themes[data-is-root-theme='true'] {
   font-family: system-ui, sans-serif;
   background: transparent;
+  min-height: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {

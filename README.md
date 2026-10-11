@@ -24,6 +24,7 @@ Windows のブラウザから `http://localhost:4321/lab/` にアクセスしま
 pnpm check
 pnpm build
 pnpm build-storybook
+pnpm test:storybook
 pnpm test:e2e
 pnpm test:a11y
 pnpm test:visual
@@ -34,6 +35,10 @@ pnpm bundle
 画像比較の基準画像は人間のレビュー・承認後に限り追加・更新します。`test:visual` は基準がない場合に失敗し、自動作成しません。
 
 `pnpm check` は lint / CSS lint / format / 型検査 / coverage 付き unit・component test を実行します。ブラウザ検証は本番 build に対して別途実行します。
+
+`pnpm lighthouse` は導入済みの Playwright Chromium を起動して計測するため、WSL 側で完結します。`pnpm exec playwright install chromium` を先に実行してください。測定結果は `.lighthouseci/reports/` に保存し、外部へ upload しません。
+
+再構築の検証結果と再開手順は [作業記録](docs/rebuild-status.md) を参照してください。
 
 ## 構成
 

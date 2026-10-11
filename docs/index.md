@@ -1,5 +1,7 @@
 # Hiziriex Lab Docs Index
 
+- `rebuild-status.md`: 再構築の到達点、検証結果、承認待ち、再開手順
+
 ## Requirements
 
 - `requirements/site-requirements.md`
@@ -14,6 +16,7 @@
 - `architecture/testing-strategy.md`
 - `architecture/github-workflow.md`
 - `architecture/release-deployment.md`
+- `architecture/repository-setup.md`
 
 ## UI
 
@@ -43,3 +46,8 @@
 - `adr/0004-use-radix-themes.md`
 - `adr/0005-use-echarts.md`
 - `adr/0006-release-by-semver-tag.md`
+- `adr/0007-prioritize-toolchain-compatibility.md`
+
+## Security
+
+- `security/dependency-audit.md`

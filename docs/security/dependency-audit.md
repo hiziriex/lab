@@ -1,12 +1,15 @@
 # 依存監査の確認記録
 
-確認日: 2026-10-10。Status: 限定例外案は人間承認待ち（監査設定は未変更）。
+確認日: 2026-10-11。Status: 限定例外案は人間承認待ち（監査設定は未変更）。
+
+再開時の `pnpm audit --audit-level high` は終了コード 1。High 3 / Moderate 2 / Low 1。
+High は以下の3件で、registry の監査結果に修正版は記載されていない。CI の High / Critical gate は維持する。
 
 ## 修正済み
 
 - tmp: 0.2.7 に override。0.2.6 の型混同による迂回も修正する。
 - basic-ftp: 6.2.1 に override。
-- Lighthouse の実行は更新後にも確認する。上流が修正版を解決するようになれば override を除去する。
+- Lighthouse は導入済み Chromium を使う runner で3ページ各3回の計測が成功した。上流が修正版を解決するようになれば override を除去する。
 
 ## 修正版のない High と限定例外案
 

@@ -88,6 +88,8 @@ coverage report を有効化。
 初期段階では global threshold を厳格設定しない。
 `src/lib/calculations/` は高い coverage を維持する。
 
+`ResizeObserver` / `matchMedia` は jsdom の test setup で補完する。production code へテスト環境用の代替実装を入れない。
+
 ## 9. Storybook
 
 共通 UI component を中心に story 化。
@@ -101,6 +103,9 @@ coverage report を有効化。
 - Sidebar
 - ParameterPanel
 - section navigation
+
+`pnpm build-storybook` 後に `pnpm test:storybook` で共通入力の normal / focus / error / disabled / current の表示・操作・axe を確認する。
+site と Storybook の browser artifact は `test-results/e2e/` / `test-results/storybook/` へ分離する。
 
 state 例:
 
@@ -120,6 +125,9 @@ state 例:
 - SEO >= 95
 
 初期は warning。
+
+`pnpm lighthouse` は Playwright Chromium を専用の一時 profile で起動し、LHCI をその検証ポートへ接続する。
+WSL で Windows Chrome を探索せず、ブラウザの追加 download / ZIP 展開も行わない。3 URL を各 3 回測定し、結果は `.lighthouseci/reports/` に保存する。
 
 ## 11. Bundle
 
