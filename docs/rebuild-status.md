@@ -160,3 +160,13 @@ PR / merge / tag / Release / deploy / repository settings は未実施。
 - UI仕様 / Testing Strategy / CHANGELOG は overlay 修正 commit で更新済み。新規 ADR は不要。実装の未解決 error と未承認 baseline 差分はなくなった。
 - GitHub CI / Release workflow は未実行。Windows / macOS 実ブラウザ・実機端末は未確認。正式 version、X/Twitter URL、GitHub settings / 公開判断は引き続き別途確定する。
 - PR / merge / tag / Release / deploy / GitHub settings 変更は行っていない。PR の作成には別途承認が必要。
+
+
+## PR 作成と初回 GitHub CI（2026-10-11）
+
+- 人間承認済みタイトル・本文で [PR #1](https://github.com/hiziriex/lab/pull/1) を作成。base は main、head は chore/rebuild-lab。
+- 初回 CI（run 38114802026）の quality は生成型がない fresh checkout で43件の ESLint 型解決エラー。CSS Modules、Content Collections、import.meta.env が未解決だった。
+- .astro を含めない一時 checkout で同じ43件を再現し、astro sync → ESLint で解消した。pnpm lint の冒頭に astro sync を追加し、型検査ルール・security policy・baseline は維持した。
+- 修正後の pnpm check は型検査の指摘0、59件成功。pnpm build は静的4ページ成功。Tooling仕様と CHANGELOG を更新した。
+- 抵抗候補表の極小誤差表示は人間の指示に従い後続改善として扱い、今回変更していない。
+- merge / 正式version / tag / Release / deploy / GitHub settings変更は未実施。

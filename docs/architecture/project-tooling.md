@@ -130,6 +130,7 @@ pnpm check
 ```
 
 `pnpm check` はローカル CI 相当の主要 check をまとめて実行する。
+`pnpm lint` は fresh checkout でも型付き ESLint が CSS Modules / Astro Content Collections / `import.meta.env` を解決できるよう、最初に `astro sync` で生成型を準備する。
 
 ## 14. Audit
 
