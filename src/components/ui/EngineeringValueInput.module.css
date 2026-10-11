@@ -1,0 +1,30 @@
+.field {
+  display: grid;
+  gap: 0.4rem;
+  align-content: start;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: minmax(5rem, 1fr) 5rem;
+  gap: 0.5rem;
+}
+
+.controls input {
+  font-variant-numeric: tabular-nums;
+}
+
+.controls select {
+  min-height: 40px;
+  padding: 0.4rem;
+  border: 1px solid var(--gray-8);
+  border-radius: 4px;
+  color: var(--gray-12);
+  background: var(--color-background);
+}
+
+.error {
+  color: var(--red-11);
+  font-size: 0.85rem;
+  margin: 0;
+}

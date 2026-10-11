@@ -1,0 +1,10 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { withBase } from '../lib/site';
+---
+
+<BaseLayout title="ページが見つかりません">
+  <p>
+    URL を確認するか、<a href={withBase()}>ホーム</a>からツールを選んでください。
+  </p>
+</BaseLayout>

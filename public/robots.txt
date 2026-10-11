@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://hiziriex.github.io/lab/sitemap-index.xml
