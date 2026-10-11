@@ -170,3 +170,28 @@ PR / merge / tag / Release / deploy / repository settings は未実施。
 - 修正後の pnpm check は型検査の指摘0、59件成功。pnpm build は静的4ページ成功。Tooling仕様と CHANGELOG を更新した。
 - 抵抗候補表の極小誤差表示は人間の指示に従い後続改善として扱い、今回変更していない。
 - merge / 正式version / tag / Release / deploy / GitHub settings変更は未実施。
+
+
+## 初回正式 release 0.1.0 の準備（2026-10-11）
+
+- main は PR #1 の Squash merge commit 1baee66 と一致し、clean。main CI run 38115340938 の5 jobが成功した。
+- 人間が初回公開と正式 version 0.1.0 を承認。package.json は既存の0.1.0を正式値として維持し、About / footer は package version を参照するため追加の数値更新は不要。
+- CHANGELOG の Unreleased 内容を日付付き0.1.0 sectionへ移動。Unreleased は次回変更用として残し、重複する mobile navigation の履歴を整理した。
+- X/Twitter URL は推測せず未設定を維持。About は未設定時にlinkを表示せず自然に表示でき、公開を阻害しない。
+- 初回公開準備は chore/release-0.1.0 で行い、mainへ直接commit / pushしない。
+- Pages Source は GitHub Actions、既定 Actions 権限はread。github-pages environment がmain branchのみ許可しているため、v0.1.0 tagのdeploy許可追加には別途人間承認が必要。
+- dependency audit例外、baseline、計算・UI仕様は変更していない。極小誤差表示は後続改善。
+
+
+### 0.1.0 release check 結果
+
+- bash scripts/release-check.sh v0.1.0 は専用production previewへ接続して終了コード0。開始時・終了時ともclean。
+- 既定4321に人間のastro devが起動中だったため、最初の実行はE2Eで停止。既存serverを停止せず、/tmpの一時Playwright設定でsite browser検証のみ4323のproduction previewへ向けて全scriptを再実行した。test選択・assertion・retry・baseline・security policyは同一。実行logは /tmp/lab-release-check-0.1.0.log。
+- pnpm check成功：lint / CSS lint / format / 型検査（error・warning・hint 0）、59件成功。site buildは4ページ、Storybook build成功（既知の依存directive / chunk size警告あり）。
+- Storybook browser 5件、E2E 50件、accessibility 10件、Visual Regression 2件成功。Desktop / Pixel 7 baselineは未変更。
+- 最新audit gate成功。High 3 / Moderate 2 / Low 1 / Critical 0。承認済みHigh 3件の修正版なし・依存条件一致、有効期限2026-11-10日本時間当日末のまま。
+- Lighthouseは3ページ各3回の9回で閾値達成。home / Aboutは全項目100、分圧ツールPerformance 95–97、Accessibility / Best Practices / SEO 100。
+- bundle: JS raw 281700 / gzip 90462 bytes、CSS raw 715996 / gzip 88018 bytes。localで比較元なし。
+- build HTMLのAbout / footerが0.1.0を表示し、未設定X/Twitter linkが非表示であることを確認。
+- release metadataとCHANGELOGの日付付きsectionはv0.1.0と整合。tag / GitHub Releaseは未作成。
+- tag作成前の残作業：release準備PRをCI成功後にSquash mergeしmain CIを確認。github-pagesにtype: tag / name: v0.1.0のdeploy許可を追加（既存main許可を保持）。これらは人間承認後に実施する。その他のrepository settings、release / deploy仕様、security policyの変更は不要。
