@@ -105,6 +105,7 @@ test('@review 承認用画像（baseline は変更しない）', async ({ page, 
       path: `review-artifacts/divider-${testInfo.project.name}.png`,
       fullPage: true,
       animations: 'disabled',
+      scale: 'device',
     }),
     contentType: 'image/png',
   });

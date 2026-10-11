@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async ({ page }, testInfo) => {
+  // review と同じく初回読み込み前に motion 設定を適用する。
+  if (testInfo.title.includes('@visual')) await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('tools/voltage-divider/');
   await expect(page.getByRole('checkbox', { name: '候補 1 を比較' })).toBeChecked();
 });
@@ -80,8 +82,12 @@ test('@a11y 入力・結果・dark・エラー', async ({ page }) => {
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
 });
 test('@visual 初期状態', async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: 'reduce' });
-  await expect(page).toHaveScreenshot('divider.png', { fullPage: true, animations: 'disabled' });
+  await page.evaluate(() => document.fonts.ready);
+  await expect(page).toHaveScreenshot('divider.png', {
+    fullPage: true,
+    animations: 'disabled',
+    scale: 'device',
+  });
 });
 
 test('mobile section nav は入力を遮らず、展開後も操作できる', async ({ page }) => {

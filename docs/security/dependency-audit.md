@@ -39,3 +39,7 @@ CI と release-check は `pnpm audit:check` を実行する。生の `pnpm audit
 監査取得失敗・形式不正・件数不一致も失敗する。Low / Moderate の監査出力を残す。
 registry に修正版が記載された場合も失敗させ、修正版へ移行して該当例外を解除する。
 例外が残っていれば、監査結果が改善しても期限切れを許容しない。その他の security gate は変更しない。
+
+## baseline 登録後の再確認
+
+2026-10-11 に `pnpm audit:check` を再実行し終了コード0。High 3 / Moderate 2 / Low 1 / Critical 0。High は既知3件と同じ ID・version・依存経路で、監査結果の patched_versions は null。例外の範囲・期限・再評価条件は変更していない。

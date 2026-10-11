@@ -10,6 +10,7 @@
 - Astro 静的ページ、React Islands、共通入力と分圧抵抗計算。
 - E12 / E24 の比率探索、候補比較、レスポンシブ表示。
 - 単体・コンポーネント・E2E・アクセシビリティ・画像比較の検証基盤。
+- 人間承認済みの Desktop Chromium / Pixel 7 の初回画像比較 baseline。
 - CI、Storybook、Lighthouse、bundle 計測、明示的な tag による公開フロー。
 
 ### Removed

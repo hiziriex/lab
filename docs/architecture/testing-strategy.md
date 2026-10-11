@@ -67,7 +67,7 @@ Playwright は global setup で確認し、不在ならテスト開始前に失�
 review 撮影は `document.fonts.ready` を待ち、HTML の `lang="ja"` と heading / input の共通 stack を検証する。
 Linux Chromium / Pixel 7 は CDP から heading / label の実描画フォントを取得し、日本語向け Noto が local font として使用されたことを確認する。
 フォント検証結果は Playwright attachment と `review-artifacts/*-fonts.json` に保存し、CI の browser-results artifact に確認画像と共に含める。Pixel 7 は Linux 上のエミュレーションで、Android 実機のフォントではない。
-新しい画像は両方の人間確認まで baseline に追加・更新しない。
+review / 画像比較とも device pixel のスケールを明示し、reduced motion は初回ページ読み込み前に設定する。新しい画像は人間確認まで baseline に追加・更新しない。
 
 ## 6. Retry
 
