@@ -60,6 +60,8 @@ Mobile:
 
 - current section name を小さく表示
 - tap で section list 展開
+- ヘッダー直下の専用領域に配置し、入力欄に重ねない
+- 展開時の高さもスクロール余白へ反映する
 
 ## 7. Anchor
 

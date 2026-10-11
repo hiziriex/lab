@@ -83,3 +83,30 @@ test('@visual 初期状態', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await expect(page).toHaveScreenshot('divider.png', { fullPage: true, animations: 'disabled' });
 });
+
+test('mobile section nav は入力を遮らず、展開後も操作できる', async ({ page }) => {
+  await page.setViewportSize({ width: 412, height: 915 });
+  const nav = page.getByRole('navigation', { name: 'ページ内ナビゲーション' });
+  const unit = page.getByLabel('分圧電流 Idiv の単位');
+  for (const expanded of [false, true]) {
+    if (expanded) await nav.locator('summary').click();
+    await unit.scrollIntoViewIfNeeded();
+    await unit.focus();
+    const box = await unit.boundingBox();
+    const navBox = await nav.boundingBox();
+    expect(box!.y).toBeGreaterThanOrEqual(navBox!.y + navBox!.height);
+    expect(
+      await unit.evaluate((element) => {
+        const rect = element.getBoundingClientRect();
+        return element.contains(
+          document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2),
+        );
+      }),
+    ).toBe(true);
+    await unit.selectOption(expanded ? 'm' : '');
+    await expect(unit).toHaveValue(expanded ? 'm' : '');
+  }
+  await page.getByRole('link', { name: '01 回路と入力' }).click();
+  await expect(nav.locator('details')).not.toHaveAttribute('open');
+  await expect(page.getByRole('textbox', { name: '入力電圧 Vin' })).toBeInViewport();
+});

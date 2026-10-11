@@ -28,6 +28,7 @@ pnpm test:storybook
 pnpm test:e2e
 pnpm test:a11y
 pnpm test:visual
+pnpm audit:check
 pnpm lighthouse
 pnpm bundle
 ```

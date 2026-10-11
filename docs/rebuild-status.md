@@ -44,16 +44,16 @@ GitHub CLI は sandbox 外の read-only 確認で hiziriex の認証成功を確
 | 検証 | 結果 |
 | --- | --- |
 | `pnpm check` | 成功。型検査の error / warning / hint は 0 |
-| unit / component / Release metadata | 49件成功 |
+| unit / component / Release metadata | 59件成功（監査 gate の10件を追加） |
 | 計算関数 coverage | lines 97.67%、branches 94.11% |
 | `pnpm build` | 成功。静的4ページ |
-| `pnpm test:e2e` | 40件成功。Chromium / Firefox / WebKit / iPhone / Pixel 7 |
+| `pnpm test:e2e` | 45件成功。nav 開閉時の入力操作を追加。Chromium / Firefox / WebKit / iPhone / Pixel 7 |
 | `pnpm test:a11y` | 10件成功。ツールの light / dark / error、ホーム / About / 404 |
 | `pnpm build-storybook` | 成功 |
 | `pnpm test:storybook` | 5件成功。normal / focus / error / disabled / current の操作と axe |
 | actionlint 1.7.12 / ShellCheck | CI / Release workflow、shell script は指摘なし |
-| `pnpm test:visual` | baseline 不在で2件失敗。自動作成・更新なし |
-| `pnpm audit --audit-level high` | High 3件で失敗。例外は未承認・未設定 |
+| `pnpm test:visual` | Desktop Chromium は承認済み baseline で成功。Pixel 7 は未登録のため1件失敗 |
+| `pnpm audit:check` | 承認済み High 3件のみを期限付き例外として成功。生の audit は3件検出 |
 
 Storybook build には依存の `use client` directive / chunk size の警告と、sandbox 内で global settings を保存できないメッセージがある。
 build 自体は成功し、5つの story の表示・操作・axe も成功した。
@@ -66,37 +66,47 @@ GitHub 上で CI / Release workflow はまだ実行していない。
 Lighthouse はホーム / 分圧ツール / About を各3回測定する。初期閾値は warning。
 report は `.lighthouseci/reports/` に保存し、外部 upload は行わない。
 
-最終 build の各3回は、ホーム / About が全項目100、分圧ツールが Performance 95、Accessibility / Best Practices / SEO 100。
+最終 build の各3回は、ホーム / About が全項目100、分圧ツールが Performance 95–96、Accessibility / Best Practices / SEO 100。
 全9回で初期閾値を満たした。測定値はローカル Chromium の mobile simulation であり、実利用環境の保証ではない。
 
 bundle は build 出力全体の合計（source map / font / SVG は対象外）。
 
 | 種類 | raw bytes | gzip bytes |
 | --- | ---: | ---: |
-| JS | 281216 | 90276 |
-| CSS | 715346 | 87767 |
+| JS | 281446 | 90367 |
+| CSS | 715501 | 87823 |
 
 CSS gzip は再開時の172701 bytesから約49%削減。
 PR の比較元 build は CI の compare-bundle で計測する。ローカルでは main との差分計測は未実施。
 
 ## 承認待ち
 
-1. 初回の Visual Regression baseline 登録。
-   `review-artifacts/divider-chromium.png` と `review-artifacts/divider-android.png` は承認用画像で、baseline ではない。
-   フォルダは Git 管理対象外だが、通常の Playwright 実行では消去されない。
-   再取得は `pnpm test:e2e --grep @review`。承認後にのみ snapshot を登録する。
-2. [依存監査の限定例外案](security/dependency-audit.md)。High 3件だけを2026-11-10まで例外とする案。
-   新規 High / Critical と期限切れは失敗させる。承認前に監査 gate を緩めない。
+1. Pixel 7 の修正後画像 `review-artifacts/divider-android.png` の人間確認と初回 baseline 登録。
+   旧画像は入力を遮るため不承認。ヘッダー直下の専用領域へ nav を移し、開閉時の入力操作を5 browserで検証済み。
+   Desktop Chromium は今回承認された旧 review 画像をそのまま snapshot にコピーし、画像比較成功。
+   mobile snapshot は未作成。review フォルダは Git 管理対象外で、再取得は `pnpm test:e2e --grep @review`。
+2. [依存監査の限定例外](security/dependency-audit.md) は承認済みで gate を実装。
+   記録済み High 3件だけを2026-11-10の日本時間当日末まで許可し、新規 High / Critical、期限切れ、修正版公開、依存条件の変化は失敗させる。
 3. GitHub の [repository settings](architecture/repository-setup.md)、正式 version、PR / merge / tag / Release / deploy。
    いずれも未実施で、個別の人間承認が必要。
 
-baseline と監査 gate が解決するまでは CI green / PR 準備完了 / Definition of Done 達成とは扱わない。
+mobile baseline が承認・登録されるまでは CI green / PR 準備完了 / Definition of Done 達成とは扱わない。
 package version は開発値の0.1.0、CHANGELOG は Unreleased のまま。
 
 ## 次回の再開手順
 
 1. `git status`、`git log -3 --oneline` とこの記録、AGENTS.md、関連仕様書を確認する。
 2. `source ~/.nvm/nvm.sh && nvm use` を実行する。
-3. 承認の有無を確認して baseline 登録と依存監査方針を進める。
+3. Pixel 7 の修正後画像への承認の有無を確認し、承認後にだけ mobile baseline を登録する。
 4. 必要な検証を実行し、失敗が残っていないことを確認する。
 5. 正式 version・CHANGELOG・GitHub settings は人間と確定する。PR を作成する場合は別途承認を得る。
+
+## 今回の保存点
+
+- `851824c` (`fix: enforce approved dependency audit exceptions`) に承認済み監査 gate を保存。
+- mobile nav の配置修正、Desktop baseline、仕様・検証記録を次の commit に保存する。
+- 修正後 Pixel 7 review 画像の SHA-256: `c14c1fd08d2a2bdbf13e2ea25edfe38a54b0c1288f756d860cb05c4501a09029`。
+- 承認済み Desktop baseline の SHA-256: `281eb2674dda61e86763cc8bc4f343f81644e7cf35951bc852c1e3464d607179`。
+- 最新 Lighthouse の9件は reports/manifest.json から参照する。過去 report も残るため全 JSON の集計とは区別する。
+- `pnpm check` / build / browser / audit / workflow lint は成功。Visual Regression だけは mobile の人間確認待ち。
+- PR / merge / tag / Release / deploy / repository settings の変更は行っていない。

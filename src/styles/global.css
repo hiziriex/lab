@@ -87,7 +87,7 @@ p {
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 5rem;
+  scroll-padding-top: calc(var(--topbar-height, 56px) + 16px);
 }
 
 .radix-themes[data-is-root-theme='true'] {

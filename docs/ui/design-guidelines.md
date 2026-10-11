@@ -81,6 +81,7 @@ Mobile:
 
 - current section name
 - tap to expand
+- ヘッダー直下の専用領域に配置し、入力操作を妨げない
 
 Section link click:
 

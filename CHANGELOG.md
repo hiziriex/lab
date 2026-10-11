@@ -18,6 +18,9 @@
 
 ### Fixed
 
+- mobile のページ内ナビゲーションをヘッダー直下へ移し、分圧電流の単位入力との重なりを解消。
+- 承認済み High 3件に限定した期限付き監査 gate と、その期限・依存条件・修正版の検証。
+
 - TypeScript 6.0.x の互換構成と、test environment の ResizeObserver 補完。
 - WSL で導入済み Chromium を使用する Lighthouse runner。
 - 404 の canonical / OGP URL と Release の CHANGELOG section 検証。

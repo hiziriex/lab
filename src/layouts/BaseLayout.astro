@@ -37,21 +37,24 @@ const links = [
     <a class={styles.skip} href="#main">
       本文へスキップ
     </a>
-    <header class={styles.header}>
-      <button
-        id="navigation-toggle"
-        class={styles.toggle}
-        aria-label="ナビゲーションを開閉"
-        aria-controls="desktop-navigation"
-        aria-expanded="true"
-      >
-        <Menu size={20} />
-      </button>
-      <a class={styles.brand} href={withBase()}>
-        <span class={styles.mark}>HL</span>
-        {site.name}
-      </a>
-    </header>
+    <div class={styles.topbar}>
+      <header class={styles.header}>
+        <button
+          id="navigation-toggle"
+          class={styles.toggle}
+          aria-label="ナビゲーションを開閉"
+          aria-controls="desktop-navigation"
+          aria-expanded="true"
+        >
+          <Menu size={20} />
+        </button>
+        <a class={styles.brand} href={withBase()}>
+          <span class={styles.mark}>HL</span>
+          {site.name}
+        </a>
+      </header>
+      <slot name="section-navigation" />
+    </div>
     <div class={styles.shell}>
       <aside id="desktop-navigation" class={styles.sidebar}>
         <nav aria-label="メインナビゲーション">
