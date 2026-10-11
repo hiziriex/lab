@@ -21,6 +21,7 @@
 
 ### Fixed
 
+- Release job の Node.js setup で不要な package manager cache を無効化し、pnpm 未導入による公開処理の失敗を解消。
 - fresh checkout の lint 前に Astro の型を生成し、GitHub CI での型解決エラーを解消。
 - mobile section navigation を viewport 固定の overlay に変更し、開閉による本文の上下移動を解消。
 - 日本語向け system font stack をページ・Radix 入力で共通化し、Linux browser / CI で Noto の存在と実描画フォントを検証。
