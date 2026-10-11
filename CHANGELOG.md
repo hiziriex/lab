@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-10-11
+
 ### Added
 
 - WSL / Node.js 24 / pnpm による開発基盤と品質チェック。
@@ -20,14 +22,9 @@
 ### Fixed
 
 - fresh checkout の lint 前に Astro の型を生成し、GitHub CI での型解決エラーを解消。
-
 - mobile section navigation を viewport 固定の overlay に変更し、開閉による本文の上下移動を解消。
-
 - 日本語向け system font stack をページ・Radix 入力で共通化し、Linux browser / CI で Noto の存在と実描画フォントを検証。
-
-- mobile のページ内ナビゲーションをヘッダー直下へ移し、分圧電流の単位入力との重なりを解消。
 - 承認済み High 3件に限定した期限付き監査 gate と、その期限・依存条件・修正版の検証。
-
 - TypeScript 6.0.x の互換構成と、test environment の ResizeObserver 補完。
 - WSL で導入済み Chromium を使用する Lighthouse runner。
 - 404 の canonical / OGP URL と Release の CHANGELOG section 検証。

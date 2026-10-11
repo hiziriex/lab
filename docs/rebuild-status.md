@@ -170,3 +170,14 @@ PR / merge / tag / Release / deploy / repository settings は未実施。
 - 修正後の pnpm check は型検査の指摘0、59件成功。pnpm build は静的4ページ成功。Tooling仕様と CHANGELOG を更新した。
 - 抵抗候補表の極小誤差表示は人間の指示に従い後続改善として扱い、今回変更していない。
 - merge / 正式version / tag / Release / deploy / GitHub settings変更は未実施。
+
+
+## 初回正式 release 0.1.0 の準備（2026-10-11）
+
+- main は PR #1 の Squash merge commit 1baee66 と一致し、clean。main CI run 38115340938 の5 jobが成功した。
+- 人間が初回公開と正式 version 0.1.0 を承認。package.json は既存の0.1.0を正式値として維持し、About / footer は package version を参照するため追加の数値更新は不要。
+- CHANGELOG の Unreleased 内容を日付付き0.1.0 sectionへ移動。Unreleased は次回変更用として残し、重複する mobile navigation の履歴を整理した。
+- X/Twitter URL は推測せず未設定を維持。About は未設定時にlinkを表示せず自然に表示でき、公開を阻害しない。
+- 初回公開準備は chore/release-0.1.0 で行い、mainへ直接commit / pushしない。
+- Pages Source は GitHub Actions、既定 Actions 権限はread。github-pages environment がmain branchのみ許可しているため、v0.1.0 tagのdeploy許可追加には別途人間承認が必要。
+- dependency audit例外、baseline、計算・UI仕様は変更していない。極小誤差表示は後続改善。
