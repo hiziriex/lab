@@ -80,6 +80,11 @@ Sidebar mode 将来想定:
 Tool page は vertical scroll。
 small floating section navigation。
 
+Desktop:
+
+- viewport 基準の fixed overlay とし、sidebar 開閉・navigation の有無で本文に縦余白を作らない
+- scroll に追従し、viewport 内に収める。高さ不足時は内部 scroll を可能にする
+
 Mobile:
 
 - current section name

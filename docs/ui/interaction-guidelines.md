@@ -63,8 +63,7 @@ error 発生時に自動 focus 移動はしない。
 候補を選択した場合:
 
 - checkbox
-- candidate number / rank
-- color swatch
+- candidate series color を checkbox 本体へ反映（未選択は neutral）
 - pale background
 
 を併用する。
@@ -73,7 +72,9 @@ error 発生時に自動 focus 移動はしない。
 将来 chart を追加した際:
 
 ```text
-candidate table color = chart series color = chart legend color
+checkbox color = candidate series color = chart series color = chart legend color
 ```
 
 となるよう color mapping を共通化する。
+
+候補の順位を識別子として共通 palette を参照し、選択・解除しても他候補の色を変えない。白い check mark との contrast を確保する。

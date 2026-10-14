@@ -15,8 +15,8 @@
 }
 
 .controls select {
-  min-height: 40px;
-  padding: 0.4rem;
+  height: var(--control-height);
+  padding-inline: 0.4rem;
   border: 1px solid var(--gray-8);
   border-radius: 4px;
   color: var(--gray-12);

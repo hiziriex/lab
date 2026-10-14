@@ -1,6 +1,10 @@
 import '@radix-ui/themes/styles.css';
+import type { CSSProperties } from 'react';
+import { candidateSeriesColors } from '../../lib/candidate-colors';
+import { formatVoltageError, formatRelativeError } from '../../lib/formatters/divider-error';
 import { Button, Checkbox, Badge, Spinner } from '@radix-ui/themes';
 import { Calculator, RotateCcw, AlertTriangle } from 'lucide-react';
+import { OptionalEngineeringValueInput } from '../ui/OptionalEngineeringValueInput';
 import { EngineeringValueInput } from '../ui/EngineeringValueInput';
 import { SystemTheme } from '../ui/SystemTheme';
 import { ToolBoundary } from '../ui/ToolBoundary';
@@ -55,32 +59,21 @@ function Divider() {
                   onChange={(value) => setFields((s) => ({ ...s, [name]: value }))}
                 />
               ))}
-              <div>
-                <label className={styles.check}>
-                  <Checkbox
-                    checked={fields.currentEnabled}
-                    onCheckedChange={(checked) =>
-                      setFields((s) => ({ ...s, currentEnabled: checked === true }))
-                    }
-                  />
-                  分圧電流を指定
-                </label>
-                <EngineeringValueInput
-                  label="分圧電流 Idiv"
-                  unit="A"
-                  value={fields.targetCurrent}
-                  prefixes={['µ', 'm', '']}
-                  disabled={!fields.currentEnabled}
-                  required
-                  error={
-                    fields.currentEnabled && touched.targetCurrent
-                      ? errors.targetCurrent
-                      : undefined
-                  }
-                  onBlur={() => setTouched((s) => ({ ...s, targetCurrent: true }))}
-                  onChange={(value) => setFields((s) => ({ ...s, targetCurrent: value }))}
-                />
-              </div>
+              <OptionalEngineeringValueInput
+                label="分圧電流 Idiv"
+                optionLabel="分圧電流 Idiv を指定"
+                enabled={fields.currentEnabled}
+                onEnabledChange={(enabled) => setFields((s) => ({ ...s, currentEnabled: enabled }))}
+                unit="A"
+                value={fields.targetCurrent}
+                prefixes={['µ', 'm', '']}
+                required
+                error={
+                  fields.currentEnabled && touched.targetCurrent ? errors.targetCurrent : undefined
+                }
+                onBlur={() => setTouched((s) => ({ ...s, targetCurrent: true }))}
+                onChange={(value) => setFields((s) => ({ ...s, targetCurrent: value }))}
+              />
               <label className={styles.series}>
                 抵抗系列
                 <select
@@ -143,10 +136,10 @@ function Divider() {
               <caption className="sr-only">抵抗候補の電圧誤差、電流、消費電力</caption>
               <thead>
                 <tr>
+                  <th scope="col">
+                    <span className="sr-only">候補を比較</span>
+                  </th>
                   {[
-                    '比較',
-                    '色',
-                    '順位',
                     'R1',
                     'R2',
                     '実際の Vout',
@@ -164,9 +157,16 @@ function Divider() {
               </thead>
               <tbody>
                 {result.value.candidates.map((c) => (
-                  <tr key={c.rank} data-selected={state.selected.includes(c.rank)}>
+                  <tr
+                    key={c.rank}
+                    data-selected={state.selected.includes(c.rank)}
+                    style={
+                      { '--candidate-color': candidateSeriesColors[c.rank - 1] } as CSSProperties
+                    }
+                  >
                     <td>
                       <Checkbox
+                        className={styles.candidateCheckbox}
                         aria-label={`候補 ${c.rank} を比較`}
                         checked={state.selected.includes(c.rank)}
                         onCheckedChange={(checked) =>
@@ -176,19 +176,21 @@ function Divider() {
                         }
                       />
                     </td>
-                    <td>
-                      <span
-                        className={styles.swatch}
-                        data-color={state.selected.indexOf(c.rank)}
-                        aria-hidden="true"
-                      />
-                    </td>
-                    <th scope="row">{c.rank}</th>
                     <td>{fmt(c.r1, 'Ω')}</td>
                     <td>{fmt(c.r2, 'Ω')}</td>
                     <td>{fmt(c.actualVout, 'V')}</td>
-                    <td>{fmt(c.absoluteError, 'V')}</td>
-                    <td>{Number(c.relativeErrorPercent.toPrecision(4))} %</td>
+                    <td>
+                      {formatVoltageError({
+                        actualVout: c.actualVout,
+                        targetVout: state.resultTargetVout,
+                      })}
+                    </td>
+                    <td>
+                      {formatRelativeError({
+                        actualVout: c.actualVout,
+                        targetVout: state.resultTargetVout,
+                      })}
+                    </td>
                     <td>{fmt(c.actualDividerCurrent, 'A')}</td>
                     <td>{fmt(c.r1Power, 'W')}</td>
                     <td>{fmt(c.r2Power, 'W')}</td>

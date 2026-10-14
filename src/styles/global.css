@@ -5,6 +5,7 @@
   --font-sans:
     'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic UI', 'Yu Gothic', meiryo,
     'Noto Sans CJK JP', 'Noto Sans JP', system-ui, sans-serif;
+  --control-height: 40px;
   --page: #f8fafc;
   --panel: #fff;
   --ink: #202d3d;
@@ -112,4 +113,15 @@ html {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* Radix の外枠も native select も同じ高さで中央に配置する。 */
+.radix-themes .rt-TextFieldRoot,
+.radix-themes select {
+  height: var(--control-height);
+  min-height: var(--control-height);
+}
+
+.radix-themes select {
+  padding-block: 0;
 }

@@ -46,7 +46,7 @@ GND
 
 - Vin
 - target Vout
-- `分圧電流を指定` checkbox
+- `分圧電流 Idiv を指定` checkbox
 - Idiv
 - resistor series
 
@@ -75,7 +75,6 @@ Current specification OFF の場合 Idiv input を disabled にする。
 
 Candidate ごとに:
 
-- rank
 - R1
 - R2
 - actual Vout

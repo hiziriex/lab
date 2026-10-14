@@ -48,7 +48,7 @@ test('tablet drawer とキーボードによる復帰', async ({ page }) => {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 
-test('候補表を横スクロールしても順位と抵抗を表示', async ({ page }) => {
+test('候補表を横スクロールしても比較と抵抗を表示', async ({ page }) => {
   await page.setViewportSize({ width: 412, height: 915 });
   await page.goto('tools/voltage-divider/');
   await expect(page.getByRole('checkbox', { name: '候補 1 を比較' })).toBeChecked();
@@ -57,7 +57,7 @@ test('候補表を横スクロールしても順位と抵抗を表示', async ({
     element.scrollLeft = element.scrollWidth;
   });
   const viewport = await table.boundingBox();
-  for (const column of [3, 4, 5]) {
+  for (const column of [1, 2, 3]) {
     const cell = await page.locator(`tbody tr:first-child > :nth-child(${column})`).boundingBox();
     expect(cell!.x).toBeGreaterThanOrEqual(viewport!.x);
     expect(cell!.x + cell!.width).toBeLessThanOrEqual(viewport!.x + viewport!.width);
@@ -69,7 +69,10 @@ test('@review 承認用画像（baseline は変更しない）', async ({ page, 
   await page.goto('tools/voltage-divider/');
   await expect(page.getByRole('checkbox', { name: '候補 1 を比較' })).toBeChecked();
   await expect(page.locator('html')).toHaveAttribute('lang', 'ja');
-  for (const target of [page.locator('h1'), page.getByRole('textbox', { name: '分圧電流 Idiv' })])
+  for (const target of [
+    page.locator('h1'),
+    page.getByRole('textbox', { name: '分圧電流 Idiv を指定' }),
+  ])
     expect(await target.evaluate((element) => getComputedStyle(element).fontFamily)).toContain(
       'Noto Sans CJK JP',
     );
@@ -109,6 +112,26 @@ test('@review 承認用画像（baseline は変更しない）', async ({ page, 
     }),
     contentType: 'image/png',
   });
+  if (testInfo.project.name === 'chromium') {
+    const nav = page.locator('.section-nav');
+    const before = await nav.boundingBox();
+    for (const state of ['sidebar-visible', 'sidebar-hidden']) {
+      if (state === 'sidebar-hidden')
+        await page.getByRole('button', { name: 'ナビゲーションを開閉' }).click();
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await expect.poll(() => page.evaluate(() => scrollY)).toBe(0);
+      expect(await nav.boundingBox()).toEqual(before);
+      await testInfo.attach(`desktop-${state}`, {
+        body: await page.screenshot({
+          path: `review-artifacts/divider-desktop-${state}.png`,
+          fullPage: true,
+          animations: 'disabled',
+          scale: 'device',
+        }),
+        contentType: 'image/png',
+      });
+    }
+  }
   if (testInfo.project.name === 'android') {
     const nav = page.getByRole('navigation', { name: 'ページ内ナビゲーション' });
     const capture = async (state: string) => {
@@ -121,6 +144,20 @@ test('@review 承認用画像（baseline は変更しない）', async ({ page, 
         contentType: 'image/png',
       });
     };
+    for (const [section, area] of [
+      ['#input form', 'input'],
+      ['#results', 'candidates'],
+    ]) {
+      await testInfo.attach(`mobile-${area}`, {
+        body: await page.locator(section!).screenshot({
+          path: `review-artifacts/divider-mobile-${area}.png`,
+          animations: 'disabled',
+          scale: 'device',
+        }),
+        contentType: 'image/png',
+      });
+    }
+    await page.evaluate(() => window.scrollTo(0, 0));
     await capture('collapsed');
     await nav.locator('summary').click();
     await capture('expanded');

@@ -1,3 +1,4 @@
+import { isNumericalZero } from './numeric';
 import type { CalculationError, CalculationResult } from './types';
 export type DividerInput = {
   vin: number;
@@ -102,9 +103,22 @@ export function calculateVoltageDivider(
       }
   const currentDistance = (c: VoltageDividerCandidate) =>
     Math.abs(Math.log10(c.actualDividerCurrent) - Math.log10(input.targetCurrent));
+  const rankingError = (c: VoltageDividerCandidate) =>
+    isNumericalZero({ value: c.absoluteError, scale: Math.max(c.actualVout, input.targetVout) })
+      ? 0
+      : Math.abs(c.absoluteError);
+  const compareError = (a: VoltageDividerCandidate, b: VoltageDividerCandidate) => {
+    const difference = rankingError(a) - rankingError(b);
+    return isNumericalZero({
+      value: difference,
+      scale: Math.max(input.targetVout, a.actualVout, b.actualVout),
+    })
+      ? 0
+      : difference;
+  };
   candidates.sort(
     (a, b) =>
-      Math.abs(a.absoluteError) - Math.abs(b.absoluteError) ||
+      compareError(a, b) ||
       (input.currentEnabled ? currentDistance(a) - currentDistance(b) : 0) ||
       a.r1 - b.r1 ||
       a.r2 - b.r2,

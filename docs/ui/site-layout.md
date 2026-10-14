@@ -53,6 +53,9 @@ User は通常 scroll で戻れる。
 
 Desktop:
 
+- viewport 基準の fixed overlay。sidebar 開閉や navigation の有無で本文に縦余白を作らない
+- viewport 左下の固定位置を sidebar 開閉・main content 幅によらず維持する
+- viewport 内へ収め、短い画面では内部 scroll を可能にする
 - 小型 floating nav
 - main content を邪魔しない
 
