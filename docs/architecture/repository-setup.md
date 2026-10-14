@@ -17,7 +17,7 @@
 ## 公開前の確認
 
 Unreleased の変更を確定 version の CHANGELOG section へ移し、package version と同期する。
-人間が承認した後、作業ブランチから PR → Squash merge → release-check → tag の順で進める。
+作業ブランチから PR → Squash merge → release-check → tag の順で進める。正式有効化後の承認ルールは [Approval Policy §2・9](../automation/approval-policy.md) を参照する。`vX.Y.Zを公開して` という明示承認が当該versionのRelease Transactionを包括する。有効化前は変更前の正式policy・main上の既存承認ルールを使用する。
 Release workflow は tag が main に含まれることと package / CHANGELOG の一致を検証する。
 workflow_dispatch は公開済み Release の再 deploy 専用で、新規公開を迂回しない。
 
@@ -25,7 +25,6 @@ workflow_dispatch は公開済み Release の再 deploy 専用で、新規公開
 
 Desktop Chromium と Pixel 7 の候補画像を人間が確認し、承認後に tests/e2e の snapshot に登録する。
 未承認の間は test:visual が失敗するため、CI green / PR 準備完了とは扱わない。
-
 
 ## 初回公開準備で確認した既存設定（2026-10-11）
 

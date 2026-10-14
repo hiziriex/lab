@@ -1,6 +1,9 @@
 # AGENTS.md
 
 このファイルは Hiziriex Lab を開発する Codex / AI Agent 向けの開発ルール正本である。
+承認ルールの正本は、正式有効化後の [Approval Policy](docs/automation/approval-policy.md) とする。
+
+> この参照変更は正式有効化に向けた変更案であり、作業branch上では承認ルールを切り替えない。Approval Policy §6の人間レビュー・承認・mainへのmergeが完了するまでは、変更前の正式policy・main上の既存承認ルールを使用する。この文書の編集やStatus変更だけで自己権限を拡大しない。
 
 ## 1. 仕様の読み方
 
@@ -47,33 +50,29 @@
 - `main` へ force push しない。
 - 通常の `git push --force` を使用しない。
 - Visual Regression の基準画像を人間確認なしに更新しない。
-- Issue / PR / merge / release tag / Release / 正式公開を人間確認なしに行わない。
+- 外部操作の承認条件は、正式有効化後の [Approval Policy §2–5・9](docs/automation/approval-policy.md) に従う。個別制限、ASK / DENY、安全境界、baseline承認を包括承認で上書きしない。
 - 未コミット変更を勝手に破棄・stash・上書きしない。
 - Beta / RC / Canary / Experimental 版を通常依存へ採用しない。
 - Secret / token / API key を repository へ直書きしない。
 
-## 4. Codex が確認なしで実行してよい操作
+## 4. タスク承認
 
-- 作業ブランチ作成・切替
-- 作業ブランチ内の commit
-- 自身の変更が原因と明確なテスト失敗の修正
-- `main` 追従のための rebase
-- 自身が作成した未 merge 作業ブランチへの `--force-with-lease`
+正式有効化後の操作区分と包括承認は [Approval Policy §2–3](docs/automation/approval-policy.md) を正本とする。
 
-## 5. 人間確認が必須の操作
+- 実装依頼は原則として作業branch作成、実装、検証、commit、PR作成、PR CI確認までを包括する。
+- mergeは対象を明示した人間承認が必要。実装依頼やCI成功だけではmergeしない。
+- `vX.Y.Zを公開して` という明示承認は、そのversionのRelease Transactionを包括する。
+- 「文書のみ」「commit禁止」「PR禁止」等の個別制限を常に優先する。
 
-実行前に必ず人間へ確認する。
+有効化前は冒頭の適用条件に従い、今回の作業にこの変更案を使用しない。
 
-- GitHub Issue 作成
-- GitHub PR 作成
-- PR merge
-- Visual Regression baseline 更新
-- release tag 作成
-- GitHub Release 開始
-- GitHub Pages 正式公開
-- repository settings / branch protection 等の GitHub 設定変更
-- 原因不明・既存仕様へ影響する修正
-- 既存の未コミット変更の処理
+## 5. 人間判断・安全境界
+
+人間確認を必要とする操作と禁止操作は [Approval Policy §4–7](docs/automation/approval-policy.md) を参照する。
+ASK / DENYはALLOW / ALLOW_IF・包括承認より優先する。baseline追加・変更は人間確認必須。
+安全境界変更は通常の実装・merge・release承認に含まれない。
+
+待機・中断・再開、既存credentialの通常利用、tagの公開状態は、それぞれApproval Policy §2・3・9の定義に従う。task approvalはsandbox / tool permissionを解除しない。
 
 ## 6. Git
 
@@ -104,7 +103,7 @@ Conventional Commits を使用する。
 PR title も Conventional Commits 形式とする。
 `main` への merge は Squash merge を基本とする。
 
-PR を作成する前に以下を人間へ報告する。
+正式有効化後は Approval Policy §3の条件を満たしてPRを作成し、以下をPR本文と結果報告に記載する。有効化前のPR作成は従来どおり人間確認後とする。
 
 - 変更内容
 - テスト結果
@@ -187,4 +186,4 @@ Flaky test を retry 増加で隠さない。
 ## 12. TODO
 
 `TODO:` コメントは一時利用可能。
-長期課題は Issue 化を検討する。ただし Codex が Issue を作る前には人間へ確認する。
+長期課題は Issue 化を検討する。実際のIssue作成の承認は [Approval Policy §4](docs/automation/approval-policy.md) に従う。
