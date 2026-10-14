@@ -40,7 +40,7 @@ Mobile:
 - absolute error / % error は横並び
 - row height を不必要に倍増させない
 - 暫定 sticky column:
-  - 順位
+  - 比較 checkbox
   - R1
   - R2
 

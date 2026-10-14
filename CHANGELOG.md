@@ -4,6 +4,15 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- 人間確認済みの Desktop Chromium / Pixel 7 の画像比較 baseline を UI 修正に合わせて更新。
+- Desktop section navigation を sidebar 開閉後も同じ viewport 固定位置にし、横移動と本文上部の余白を解消。
+- 分圧誤差の scale に応じて IEEE-754 noise を表示・順位評価で zero と判定し、実在する微小誤差には目標電圧に応じた表示分解能を適用。
+- 候補表の順位・色列を削除し、共通 series color を比較 checkbox と淡い行背景へ反映。先頭headerは読み上げ情報だけ残し、32pxの操作領域を確保して列幅を縮小。
+- 抵抗列・Mobile sticky 列、header 中央揃え、共通 control 高さを調整。
+- 分圧電流指定を checkbox と option名、その直下の値入力という2行に整理し、共通 wrapper と明示的な accessible name を用意。
+
 ## [0.1.0] - 2026-10-11
 
 ### Added

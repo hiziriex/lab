@@ -128,7 +128,7 @@ Multiple check possible。
 Checked rows:
 
 - pale background
-- color swatch
+- candidate series color の checkbox
 - checkbox
 
 Color only で状態を表現しない。
@@ -138,7 +138,7 @@ Color only で状態を表現しない。
 Pixel 7:
 
 - table horizontal swipe
-- rank / R1 / R2 sticky
+- checkbox / R1 / R2 sticky
 - Vout absolute / % error は横並び
 - row height が不要に倍増しない
 
@@ -154,3 +154,14 @@ Desktop 1440px:
 - disabled state
 - error association
 - axe critical violation なし
+
+## 13. UI / 数値表示の回帰
+
+- Vin 6 V / target 3.3 V / R1 1.8 kΩ / R2 2.2 kΩ の noise は `0 V` / `0 %`。
+- 小さい・大きい電圧 scale でも数値的 zero を区別し、5 µV 相当の実誤差を保持する。
+- 目標 3.3 V で実誤差 5 / 33 / 87 µV は `<10 µV` / `30 µV` / `90 µV`。
+- Desktop sidebar 表示・非表示・scroll・短い viewport で fixed、同一 viewport では横位置も変えない。本文の縦位置を変えない。
+- Desktop / Mobile で control 40px、header 中央、比較色の安定性、9列を確認する。
+
+- オプション名と値入力は2行。label click / Space で ON / OFF、値と単位の enabled / disabled、値保持、accessible name と group を確認する。
+- review は Desktop sidebar 表示／非表示、Mobile input／candidate area を保存し、baseline は人間確認まで更新しない。

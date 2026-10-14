@@ -32,22 +32,30 @@ Main input:
 
 - Vin
 - target Vout
-- `分圧電流を指定` checkbox
+- `分圧電流 Idiv を指定` checkbox
 - Idiv
 - E12 / E24
 
 Current specification:
 
 ```text
-☑ 分圧電流を指定 [ 1 ] [mA]
+☑ 分圧電流 Idiv を指定
+[ 1 ] [mA ▼]
 ```
 
-のような配置を基本とする。
+Desktop / Mobile とも2行構成を基本とする。
+checkbox付きオプション入力は、option名をcheckbox行に表示し、その直下に値入力を配置する。独立した値入力のfield labelを重ねて表示しない。
+小さな共通 `OptionalEngineeringValueInput` wrapper で option 行と既存値入力を組み合わせる。
+checkbox 行は native label 内の checkbox とテキストを inline-flex でまとめ、label click と keyboard 操作を維持する。
+値 input は option名の span を `aria-labelledby` で参照する。unit select は「分圧電流 Idiv の単位」という accessible name を持ち、両 control を同じ名前の group にまとめる。
+value + unit は狭い画面でも同じ行へ配置する。
 
 OFF:
 
-- current input disabled
+- current input / unit select disabled（ON では双方 enabled）
 - candidate scale は auto
+
+numeric input / unit selector / normal select は共通 `--control-height: 40px` を使用する。`分圧電流 Idiv を指定` は checkbox と label を同一行で中央に配置する。
 
 ## 4. Calculate / Reset
 
@@ -84,9 +92,7 @@ Input / unit 変更後:
 
 Columns:
 
-- comparison checkbox
-- color swatch
-- rank
+- comparison checkbox（選択時は candidate series color を反映）
 - R1
 - R2
 - actual Vout
@@ -100,13 +106,15 @@ Columns:
 Absolute / % error は横並び。
 Mobile でも 2 段化しない。
 
+候補表の順位列・専用色列は設けず、比較 checkbox を先頭に置く。先頭headerは視覚的には空欄とし、screen-reader-only の「候補を比較」で読み上げ情報を保持する。比較列とcheckboxの操作領域は共通の2rem（標準32px）とし、左右のcell paddingを省いてR1以降へ幅を回す。header は中央、数値は右、checkbox は中央揃え。数値は tabular numerals を使用する。R1 / R2 は nowrap の 6rem を基本とし、値を clip しない。Mobile も同じ列順で横スクロールを維持する。
+
 ## 8. Mobile table
 
 horizontal swipe。
 
 暫定 sticky:
 
-- rank
+- comparison checkbox
 - R1
 - R2
 
@@ -126,7 +134,7 @@ Checked candidate:
 
 - pale background
 - readable text
-- visible color swatch
+- candidate series color の checkbox
 
 Color mapping:
 
@@ -136,10 +144,10 @@ candidate table color
 = future legend color
 ```
 
-候補を複数選択した場合、青 / 赤 / 緑 ... のように順次識別色を割り当てる。
+候補の識別子に青 / 赤 / 緑 / 紫 / 橙の共通 palette を固定対応させる。選択順で色を変えない。
 色は theme / accessibility を考慮する。
 
-色だけに依存せず checkbox / rank / swatch も使う。
+色だけに依存せず checkbox の check 状態も使う。
 
 ## 10. Result update feedback
 
@@ -168,3 +176,4 @@ Vout = Vin × R2 / (R1 + R2)
 
 Floating navigation から移動可能。
 Mobile は current section + tap expand。
+Desktop は viewport 左下の同じ固定位置を使い、sidebar ON / OFF、main content 幅、scroll で横位置を変えない。

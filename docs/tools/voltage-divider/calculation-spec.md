@@ -138,3 +138,11 @@ type VoltageDividerCandidate = {
 ```
 
 Calculator は `CalculationResult<T>` パターンに従う。
+
+## 12. 数値的 zero と表示分解能
+
+誤差の生値は保持する。`abs(error_abs) <= 4 × Number.EPSILON × max(abs(actualVout), abs(targetVout))` を数値的 zero とし、順位評価・表示の両方で zero として扱う。候補間の絶対誤差差分も同じ相対 epsilon 内なら tie とし、電流・抵抗値の tie-break へ進む。固定電圧閾値は使わない。zero は `0 V` / `0 %` と表示する。
+
+実在する非zero誤差の相対値が `0.001 %` 未満なら `<0.001 %` と表示する。
+絶対誤差は `targetVout × 0.00001` の最上位 decade を表示分解能とし、非zero誤差の絶対値が分解能未満なら `<分解能 V>`、それ以上なら分解能単位へ表示だけ丸める。通常の値は符号を保持し、下限表示は絶対値を示す。
+目標 1 / 3.3 / 12 V の分解能はそれぞれ 10 / 10 / 100 µV。未更新の結果には直前に計算した目標を使用する。

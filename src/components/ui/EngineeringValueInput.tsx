@@ -4,6 +4,7 @@ import type { Constraints, EngineeringValue, Prefix } from '../../lib/units/engi
 import styles from './EngineeringValueInput.module.css';
 export type EngineeringValueInputProps = Constraints & {
   label: string;
+  labelledBy?: string;
   unit: string;
   value: EngineeringValue;
   prefixes: Prefix[];
@@ -14,6 +15,7 @@ export type EngineeringValueInputProps = Constraints & {
 };
 export function EngineeringValueInput({
   label,
+  labelledBy,
   unit,
   value,
   prefixes,
@@ -29,10 +31,11 @@ export function EngineeringValueInput({
   const id = useId();
   return (
     <div className={styles.field}>
-      <label htmlFor={id}>{label}</label>
+      {!labelledBy && <label htmlFor={id}>{label}</label>}
       <div className={styles.controls}>
         <TextField.Root
           id={id}
+          aria-labelledby={labelledBy}
           type="text"
           inputMode="decimal"
           value={value.text}

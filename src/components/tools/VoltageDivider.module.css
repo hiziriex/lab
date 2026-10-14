@@ -50,14 +50,6 @@
   gap: 1.2rem;
 }
 
-.check {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  min-height: 40px;
-  margin-bottom: 0.4rem;
-}
-
 .series {
   display: grid;
   align-content: start;
@@ -65,8 +57,8 @@
 }
 
 .series select {
-  min-height: 40px;
-  padding: 0.5rem;
+  height: var(--control-height);
+  padding-inline: 0.5rem;
   color: var(--gray-12);
   background: var(--color-background);
   border: 1px solid var(--gray-8);
@@ -111,6 +103,9 @@
 }
 
 .table {
+  --comparison-column-width: 2rem;
+  --resistor-column-width: 6rem;
+
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
@@ -129,66 +124,53 @@
 }
 
 .table thead th {
+  text-align: center;
   background: var(--gray-3);
   color: var(--gray-11);
   font-weight: 500;
 }
 
 .table tr[data-selected='true'] > * {
-  background: var(--blue-2);
+  background: color-mix(in srgb, var(--candidate-color) 7%, var(--color-background));
+}
+
+.table th:first-child,
+.table td:first-child {
+  position: sticky;
+  left: 0;
+  width: var(--comparison-column-width);
+  min-width: var(--comparison-column-width);
+  max-width: var(--comparison-column-width);
+  padding: 0.4rem 0;
+  text-align: center;
+  z-index: 1;
+}
+
+.table th:nth-child(2),
+.table td:nth-child(2),
+.table th:nth-child(3),
+.table td:nth-child(3) {
+  width: var(--resistor-column-width);
+  min-width: var(--resistor-column-width);
+  max-width: var(--resistor-column-width);
+  position: sticky;
+  left: var(--comparison-column-width);
+  z-index: 1;
+  padding-inline: 0.4rem;
 }
 
 .table th:nth-child(3),
 .table td:nth-child(3) {
-  position: sticky;
-  left: 0;
-  min-width: 42px;
-  z-index: 1;
-}
-
-.table th:nth-child(4),
-.table td:nth-child(4) {
-  position: sticky;
-  left: 42px;
-  min-width: 86px;
-  z-index: 1;
-}
-
-.table th:nth-child(5),
-.table td:nth-child(5) {
-  position: sticky;
-  left: 128px;
-  min-width: 86px;
-  z-index: 1;
+  left: calc(var(--comparison-column-width) + var(--resistor-column-width));
   box-shadow: 1px 0 var(--gray-6);
 }
 
-.swatch {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 2px;
-  background: var(--gray-8);
-}
+.candidateCheckbox {
+  width: var(--comparison-column-width);
+  height: var(--comparison-column-width);
 
-.swatch[data-color='0'] {
-  background: var(--blue-10);
-}
-
-.swatch[data-color='1'] {
-  background: var(--red-10);
-}
-
-.swatch[data-color='2'] {
-  background: var(--green-10);
-}
-
-.swatch[data-color='3'] {
-  background: var(--violet-10);
-}
-
-.swatch[data-color='4'] {
-  background: var(--orange-10);
+  --accent-indicator: var(--candidate-color);
+  --accent-contrast: white;
 }
 
 @keyframes feedback {

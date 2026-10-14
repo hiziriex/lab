@@ -121,3 +121,11 @@ step は原則なし。
 - error
 - disabled
 - unit variants
+
+共通 UI token `--control-height: 40px` で Radix TextField の外枠・単位 select・通常 select の高さを揃える。select の縦 padding による高さ差を避ける。
+
+## 11. Checkbox付きオプション入力
+
+`OptionalEngineeringValueInput` は option名と checkbox を一行にまとめ、その直下へ `EngineeringValueInput` を配置する。enabled state に応じて数値と単位の双方を無効化する。計算 state や validation は呼び出し元で管理する。
+
+`EngineeringValueInput.labelledBy` に外部 option名のIDを渡す場合、重複する可視labelを作らず、その要素を値inputの accessible name として参照する。単位の accessible name は従来どおり `label + の単位` とする。

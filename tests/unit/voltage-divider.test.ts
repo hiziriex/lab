@@ -71,3 +71,44 @@ describe('分圧抵抗候補', () => {
     ).toBe(false);
   });
 });
+
+it.each([1e-12, 1, 1e12])('scale %s で一致と実在する微小誤差を区別し生値を保つ', (scale) => {
+  const input = {
+    ...defaultInput,
+    vin: 6 * scale,
+    targetVout: 3.3 * scale,
+    targetCurrent: 0.0015 * scale,
+  };
+  const exact = calculateVoltageDivider(input);
+  expect(exact.ok).toBe(true);
+  if (!exact.ok) return;
+  const first = exact.value.candidates[0]!;
+  expect(first.r1).toBeCloseTo(1800);
+  expect(first.r2).toBeCloseTo(2200);
+  expect(first.absoluteError).toBe(first.actualVout - input.targetVout);
+  const shifted = calculateVoltageDivider({ ...input, targetVout: (3.3 + 5e-6) * scale });
+  expect(shifted.ok).toBe(true);
+  if (!shifted.ok) return;
+  expect(Math.abs(shifted.value.candidates[0]!.absoluteError)).toBeGreaterThan(4.9e-6 * scale);
+});
+
+it('対称な非zero誤差も丸め noise で順位を変えず、抵抗値で tie-break する', () => {
+  const result = calculateVoltageDivider({
+    ...defaultInput,
+    vin: 6,
+    targetVout: 3,
+    currentEnabled: false,
+  });
+  if (!result.ok) throw new Error('候補生成失敗');
+  const candidates = result.value.candidates;
+  for (let i = 1; i < candidates.length; i++) {
+    const previous = candidates[i - 1]!;
+    const current = candidates[i]!;
+    if (
+      Math.abs(Math.abs(previous.absoluteError) - Math.abs(current.absoluteError)) <=
+      4 * Number.EPSILON * 6
+    ) {
+      expect(previous.r1).toBeLessThanOrEqual(current.r1);
+    }
+  }
+});

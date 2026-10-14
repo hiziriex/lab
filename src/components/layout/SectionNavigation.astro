@@ -31,11 +31,9 @@
     cursor: pointer;
     padding: 0.6rem 1rem;
   }
-  @media (width < 1024px) {
-    summary:focus-visible,
-    .section-nav a:focus-visible {
-      outline-offset: -3px;
-    }
+  summary:focus-visible,
+  .section-nav a:focus-visible {
+    outline-offset: -3px;
   }
   .section-nav a {
     display: block;
@@ -46,17 +44,11 @@
       position: fixed;
       top: auto;
       bottom: 1rem;
-      max-height: none;
-      overflow: visible;
+      max-height: calc(100dvh - var(--header-height, 56px) - 24px);
       margin: 0;
       left: 12px;
       right: auto;
       width: 176px;
-    }
-    :global(body[data-nav-collapsed='true']) .section-nav {
-      position: static;
-      width: max-content;
-      margin-top: 1rem;
     }
     summary {
       display: none;
