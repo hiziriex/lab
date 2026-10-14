@@ -1,5 +1,8 @@
 # GitHub Workflow / Repository Rules
 
+承認ルールの正本は正式有効化後の [Approval Policy](../automation/approval-policy.md) とする。
+この参照変更は有効化準備の変更案であり、作業branch上では適用しない。Approval Policy §6の人間レビュー・承認・mainへのmerge完了までは変更前の正式policy・main上の既存承認ルールを使用する。
+
 ## 1. Repository
 
 - repository: `hiziriex/lab`
@@ -38,23 +41,15 @@ prefix:
 - `refactor/`
 - `chore/`
 
-Codex は作業 branch を自動作成してよい。
+作業branch作成・切替の承認条件は [Approval Policy §3](../automation/approval-policy.md) を参照する。
 
 `main` 更新時は原則 rebase で追従。
 
-Codex 自身が作成した未 merge branch に限り、必要なら `--force-with-lease` 可。
-通常の `--force` は禁止。
+force-with-leaseとbranch削除の承認条件は [Approval Policy §3](../automation/approval-policy.md) を参照する。通常の `--force` は禁止。
 
 ## 5. Existing working tree
 
-Codex が未コミット変更を発見した場合:
-
-- discard しない
-- stash しない
-- overwrite しない
-- 勝手に commit しない
-
-人間へ確認する。
+人間または別作業による既存の未コミット変更の保護は [Approval Policy §3–4](../automation/approval-policy.md) に従う。勝手なdiscard / stash / overwrite / commitを行わない。
 
 ## 6. PR template
 
@@ -94,15 +89,13 @@ Codex が未コミット変更を発見した場合:
 ## 9. Issue operation
 
 Codex は Issue 案を提案してよい。
-実際の Issue 作成は必ず人間確認後。
+実際のIssue作成は [Approval Policy §4](../automation/approval-policy.md) のASKに従う。
 
 ## 10. PR operation
 
 Codex は PR title / body 案を作成してよい。
-実際の PR 作成は必ず人間確認後。
-
-CI pass 後でも Codex が勝手に merge しない。
-PR merge は人間の明示承認がある場合のみ。
+正式有効化後は、実装依頼が原則PR作成・PR CI確認までを包括し、[Approval Policy §3](../automation/approval-policy.md) の条件を満たせばPRを作成する。
+mergeは対象を明示した人間承認が必要。CI成功だけではmergeしない。承認範囲と停止条件はApproval Policy §2–5に従う。
 
 ## 11. CODEOWNERS / Discussions / Projects
 
@@ -117,6 +110,4 @@ PR merge は人間の明示承認がある場合のみ。
 ## 12. Release control
 
 Codex が release が妥当と考えた場合、version candidate は提案してよい。
-最終 version と release 実行は人間判断。
-
-Tag / Release / Pages publish は確認必須。
+最終versionとrelease実行は人間判断。`vX.Y.Zを公開して` という明示承認で当該versionのRelease Transactionを実行する。工程・停止条件・再試行・tag公開状態は [Approval Policy §9](../automation/approval-policy.md) を正本とする。

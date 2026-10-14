@@ -1,5 +1,8 @@
 # Release / Deployment
 
+承認ルールの正本は正式有効化後の [Approval Policy](../automation/approval-policy.md) とする。
+この参照変更は有効化準備の変更案であり、作業branch上では適用しない。Approval Policy §6の人間レビュー・承認・mainへのmerge完了までは変更前の正式policy・main上の既存承認ルールを使用する。
+
 ## 1. Branch strategy
 
 - `main` は常に release 可能
@@ -20,7 +23,7 @@ Merge 後 branch 自動削除。
 - `refactor/`
 - `chore/`
 
-Codex は作業 branch を確認なしで作成してよい。
+作業branch操作の承認条件は [Approval Policy §3](../automation/approval-policy.md) に従う。
 
 ## 3. Conventional Commits
 
@@ -39,7 +42,7 @@ SemVer。
 - Git tag
 - GitHub Release
 
-version 候補は Codex が提案してよいが、最終決定は人間。
+version候補はCodexが提案してよいが、最終決定は人間。明示されたversionの公開承認とRelease Transactionは [Approval Policy §2・9](../automation/approval-policy.md) に従う。
 
 ## 5. Tag
 
@@ -49,12 +52,8 @@ format:
 v0.1.0
 ```
 
-release tag は以下の場合のみ作成。
+tag作成・pushの承認とtagの公開状態は [Approval Policy §3–5・9](../automation/approval-policy.md) を正本とする。承認されたRelease Transactionにはtag作成・pushと後続のRelease作成・deployを含む。
 
-- 人間が手動
-- 人間が Codex へ明示指示
-
-Codex が自主判断で tag を作らない。
 Pre-release (`-rc`) は当面使用しない。
 
 ## 6. CHANGELOG
@@ -90,7 +89,7 @@ Release 添付 artifact は初期版では不要。
 - CHANGELOG
 - package version
 
-人間または人間指示を受けた Codex が実行可能。
+release check自体は通常の検証として実行できる。公開操作の承認・停止・再開条件はApproval Policy §9に従う。
 
 ## 8. Pages deploy
 
@@ -123,9 +122,15 @@ Actions でも release check 相当を再実行する。
 
 ## 9. Failed release
 
-正式公開前に workflow が失敗した場合、未公開 tag は削除して同じ version を再利用可能。
-一度正式公開した tag は移動・削除・再利用しない。
-修正は patch version を上げる。
+失敗時の承認判断は [Approval Policy §9](../automation/approval-policy.md) のtag公開状態・停止条件・安全な再試行に従う。
+
+- Local-only tag: remoteへ未push。公開前の同一transaction内で安全に削除・再作成可能。
+- Remote-pushed / not formally published: remoteへpush済みで、Release未公開かつproduction Pages deploy未成功。削除・移動・再作成はASK。
+- Formally published tag: GitHub Release公開またはproduction deploy成功のいずれかで正式公開済み。削除・移動・別commitへの再利用はDENY。
+
+tag、Releaseの公開 / draft状態、deploy対象・結果、smoke testを報告する。Release作成がdeployより先のため、失敗時の原子的rollbackは保証しない。
+正式公開後に内容を修正する場合はpatch versionを上げる。同じtag・commitでの失敗工程の安全な再試行とは区別する。
+workflow_dispatchは正式公開済みReleaseの再deploy用であり、新規公開を迂回しない。
 
 ## 10. GitHub Actions
 
@@ -176,14 +181,9 @@ failure artifact は原則 14 日保存。
 - major: 個別 PR
 - auto merge 禁止
 
-## 12. Repository operation requiring approval
+## 12. Approval Policyとの関係
 
-人間確認必須:
-
-- Issue 作成
-- PR 作成
-- PR merge
-- release tag
-- GitHub Release
-- 正式公開
-- repository settings change
+外部操作の包括承認、ASK / DENY、安全境界、baseline確認は [Approval Policy §2–6・9](../automation/approval-policy.md) を正本とする。
+実装依頼は原則PR作成・CI確認までを包括し、mergeには対象を明示した人間承認が必要。
+release包括承認でもsecurity例外・権限変更・未承認baseline変更・DENY操作は許可されない。
+SemVer、metadata、main ancestry、CI、artifact、workflow permissions等の技術ルールはこの文書・workflow・関連scriptに残す。
