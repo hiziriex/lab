@@ -199,7 +199,7 @@ test('mobile overlay の開閉で本文が移動せず、狭い viewport と scr
 
 test('desktop overlay は sidebar 開閉と scroll 後も fixed、本文に余白を作らない', async ({
   page,
-}) => {
+}, testInfo) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.reload();
@@ -244,10 +244,37 @@ test('desktop overlay は sidebar 開閉と scroll 後も fixed、本文に余�
     expect(before!.y + before!.height).toBeLessThanOrEqual(1000);
     await page.evaluate(() => window.scrollTo(0, 0));
   }
-  await page.setViewportSize({ width: 1024, height: 180 });
-  const small = await nav.boundingBox();
-  expect(small!.y).toBeGreaterThanOrEqual(56);
-  expect(small!.y + small!.height).toBeLessThanOrEqual(180);
+  for (const height of [180, 160, 180]) {
+    await page.setViewportSize({ width: 1024, height });
+    // setViewportSize 完了時にも dvh の再計算は未完了の場合がある。
+    // 固定時間ではなく、現在の viewport に高さ制限が反映されたことを待つ。
+    const header = await page.locator('header').boundingBox();
+    await expect
+      .poll(() => nav.evaluate((element) => getComputedStyle(element).maxHeight))
+      .toBe(`${height - header!.height - 24}px`);
+    const small = await nav.boundingBox();
+    expect(small!.y).toBeGreaterThanOrEqual(56);
+    expect(small!.y).toBeGreaterThanOrEqual(header!.y + header!.height);
+    expect(small!.y + small!.height).toBeLessThanOrEqual(height);
+    expect(small!.x).toBe(fixedPosition!.x);
+    expect(small!.x + small!.width).toBeLessThanOrEqual(1024);
+    expect(await nav.evaluate((element) => getComputedStyle(element).position)).toBe('fixed');
+    expect(await nav.evaluate((element) => getComputedStyle(element).overflowY)).toBe('auto');
+    expect(await nav.evaluate((element) => element.scrollHeight > element.clientHeight)).toBe(true);
+    await nav.getByRole('link').first().focus();
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Tab');
+    await expect(nav.getByRole('link').last()).toBeFocused();
+    const lastLink = await nav.getByRole('link').last().boundingBox();
+    expect(lastLink!.y).toBeGreaterThanOrEqual(small!.y);
+    expect(lastLink!.y + lastLink!.height).toBeLessThanOrEqual(small!.y + small!.height);
+    expect(await nav.evaluate((element) => element.scrollTop)).toBeGreaterThan(0);
+    expect(await nav.boundingBox()).toEqual(small);
+  }
+  await testInfo.attach('short-viewport-overlay', {
+    body: await page.screenshot({ scale: 'css' }),
+    contentType: 'image/png',
+  });
 });
 
 test('候補列、誤差表示、control 高さ、比較色を desktop / mobile で確認', async ({ page }) => {
