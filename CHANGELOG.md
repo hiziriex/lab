@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Codexのproject-local Auto-review設定を追加。既定reviewer policyを保持する `extra_policy` で正式Approval Policyとタスク承認の範囲を参照し、検証結果と適用限界を開発環境文書へ記録。
+
 ## [0.1.1] - 2026-10-15
 
 ### Fixed
