@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-10-15
+
 ### Fixed
 
 - 短い viewport の section navigation E2E で `dvh` 再計算前の座標を取得する競合を解消。header 非重複の閾値を維持し、連続 resize・内部 scroll・keyboard 操作の検証を追加。
