@@ -6,6 +6,7 @@
 
 ### Fixed
 
+- 短い viewport の section navigation E2E で `dvh` 再計算前の座標を取得する競合を解消。header 非重複の閾値を維持し、連続 resize・内部 scroll・keyboard 操作の検証を追加。
 - 人間確認済みの Desktop Chromium / Pixel 7 の画像比較 baseline を UI 修正に合わせて更新。
 - Desktop section navigation を sidebar 開閉後も同じ viewport 固定位置にし、横移動と本文上部の余白を解消。
 - 分圧誤差の scale に応じて IEEE-754 noise を表示・順位評価で zero と判定し、実在する微小誤差には目標電圧に応じた表示分解能を適用。
