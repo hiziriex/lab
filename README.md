@@ -1,74 +1,44 @@
 # Hiziriex Lab
 
-電子回路・電源設計向けの静的サイトと計算ツールです。正本は [README-SPEC.md](README-SPEC.md)、[AGENTS.md](AGENTS.md)、[docs/](docs/index.md) です。
+電子回路・電源設計に役立つ計算ツールを公開する、回路設計者向けのサイトです。
 
-## WSL での開発
+**[公開サイトを開く](https://hiziriex.github.io/lab/)**
 
-repository は Linux filesystem の `~/work/lab` に配置します。Node.js 24 LTS を nvm で導入し、`package.json` の `packageManager` に指定された pnpm を利用してください。
+## 利用できるツール
 
-```bash
-source ~/.nvm/nvm.sh
-nvm install
-npm install --global pnpm@12.10.1
-gh auth login --hostname github.com --git-protocol https --web
-bash scripts/setup-dev.sh
-pnpm exec playwright install --with-deps
-sudo apt-get update
-sudo apt-get install -y fonts-noto-cjk
-bash scripts/check-japanese-fonts.sh
-pnpm dev
-```
+### [分圧抵抗計算](https://hiziriex.github.io/lab/tools/voltage-divider/)
 
-Linux のブラウザ検証は日本語 system font（Noto Sans CJK JP）を必須とし、不在時は開始前に失敗します。サイトにはフォントを配信しません。
+入力電圧 Vin と目標出力電圧 Vout から、分圧抵抗 R1 / R2 の組み合わせを探して比較できます。
 
-Windows のブラウザから `http://localhost:4321/lab/` にアクセスします。
+- E系列（E12 / E24）の抵抗値から、目標電圧との誤差が小さい候補を上位5件表示。
+- 候補ごとに、抵抗値、計算上の実際の Vout、絶対誤差・相対誤差（%）、分圧電流、各抵抗の消費電力を表示。
+- 分圧電流の目安を指定して探索でき、比較したい候補をチェックして確認可能。
+- Desktop / Mobile に対応。スマートフォンでは候補表を横にスクロールできます。
 
-## 検証
+## 使い方
 
-```bash
-pnpm check
-pnpm build
-pnpm build-storybook
-pnpm test:storybook
-pnpm test:e2e
-pnpm test:a11y
-pnpm test:visual
-pnpm audit:check
-pnpm lighthouse
-pnpm bundle
-```
+1. [分圧抵抗計算を開く](https://hiziriex.github.io/lab/tools/voltage-divider/)。
+2. 入力電圧 Vin、目標電圧 Vout、抵抗系列を設定します。必要に応じて「分圧電流 Idiv を指定」を有効にし、電流の目安を入力します。
+3. 「計算」を押し、候補の出力電圧・誤差・電流・消費電力を比較します。入力を変更したら再計算してください。
 
-画像比較の基準画像は人間のレビュー・承認後に限り追加・更新します。`test:visual` は基準がない場合に失敗し、自動作成しません。
+計算式と候補の選び方は、[ツールページ内の説明](https://hiziriex.github.io/lab/tools/voltage-divider/#formula)で確認できます。
+負荷電流・抵抗公差・温度変化は計算に含みません。計算結果を設計の補助として利用し、実回路で確認してください。
 
-`pnpm check` は lint / CSS lint / format / 型検査 / coverage 付き unit・component test を実行します。ブラウザ検証は本番 build に対して別途実行します。
+## 現在のバージョン
 
-`pnpm lighthouse` は導入済みの Playwright Chromium を起動して計測するため、WSL 側で完結します。`pnpm exec playwright install chromium` を先に実行してください。測定結果は `.lighthouseci/reports/` に保存し、外部へ upload しません。
-
-再構築の検証結果と再開手順は [作業記録](docs/rebuild-status.md) を参照してください。
-
-## 構成
-
-- Astro: ページ・SEO・MDX・Content Collections
-- React / Radix Themes: 対話ツール
-- `src/lib/calculations`: SI 単位の純粋計算関数
-- `src/lib/units`, `src/lib/formatters`: 入力解釈・表示
-- `src/assets/circuits/*.drawio`: 回路図正本
-- `public/circuits/*.svg`: 公開用 SVG
-
-ECharts と Mermaid は基盤依存として導入し、初版ツールのクライアント bundle へは読み込みません。X/Twitter URL は `src/lib/site.ts` の未確定設定です。
-
-## GitHub と公開
-
-[GitHub 運用仕様](docs/architecture/github-workflow.md) と [Release 仕様](docs/architecture/release-deployment.md) に従います。main merge では公開しません。人間が version と CHANGELOG を確定して `scripts/release-check.sh` を実行し、承認済みの `vX.Y.Z` tag を push した時だけ Release → Pages へ進みます。
-
-再公開は既存の公開済み tag を指定した workflow_dispatch で行います。PR / merge / tag / Release / 正式公開 / 設定変更は人間確認必須です。
-
-必要な repository 設定は [運用セットアップ](docs/architecture/repository-setup.md) を参照してください。
-
-## 復元
-
-旧実装は `chore/backup-before-rebuild`（`7d98425`）に保持しています。別ディレクトリの worktree で参照できます。再構築側の作業を破棄する必要はありません。
+**[v0.1.1](https://github.com/hiziriex/lab/releases/tag/v0.1.1)**。更新内容は[リリース一覧](https://github.com/hiziriex/lab/releases)で確認できます。
 
 ## License
 
-ソースコードは MIT。記事・説明文・図・回路図・画像等の無断転載・再配布は禁止します（法律上認められる引用を除く）。
+ソースコードは [MIT License](LICENSE) です。記事・説明文・図・回路図・画像等の無断転載・再配布は禁止します（法律上認められる引用を除く）。
+
+## Development
+
+開発手順・設計の詳細は `docs/`、AI / 開発運用の入口は `AGENTS.md` を参照してください。
+
+- [開発・AI運用ルール](AGENTS.md)：仕様の読み方、実装方針、開発時の遵守事項。
+- [開発環境](docs/architecture/development-environment.md)：WSL / Node.js / pnpm の準備と開発開始手順。
+- [Git / PR運用](docs/architecture/github-workflow.md)：branch、commit、PRの運用。
+- [Release / Deploy](docs/architecture/release-deployment.md)：version管理と公開手順。
+- [Testing](docs/architecture/testing-strategy.md)：テスト構成とブラウザ・アクセシビリティ・画像比較の検証方針。
+- [AI承認ルール](docs/automation/approval-policy.md)：自動実行できる範囲と人間の承認が必要な操作。

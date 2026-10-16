@@ -68,7 +68,24 @@ Windows 側 browser から `localhost` へアクセスして確認する。
 - 開発開始手順の案内
 
 GitHub login 等の人間操作を無理に自動化しない。
-README に setup 手順を記載する。
+セットアップ手順はこの節を入口とする。repository を WSL の Linux filesystem 上に配置してから実行する。
+
+```bash
+source ~/.nvm/nvm.sh
+nvm install
+npm install --global pnpm@12.10.1
+gh auth login --hostname github.com --git-protocol https --web
+bash scripts/setup-dev.sh
+pnpm exec playwright install --with-deps
+sudo apt-get update
+sudo apt-get install -y fonts-noto-cjk
+bash scripts/check-japanese-fonts.sh
+pnpm dev
+```
+
+GitHub CLI が認証済みの場合は `gh auth login` を省略する。
+Windows 側の browser から `http://localhost:4321/lab/` にアクセスする。
+検証項目と実行方針は [Testing Strategy](testing-strategy.md) を参照する。
 
 ## 8. 日本語フォント
 
