@@ -84,6 +84,7 @@ export function useDividerState() {
     fields,
     setFields,
     result,
+    resultVin: readFields(lastFields).input.vin,
     resultTargetVout: readFields(lastFields).input.targetVout,
     touched,
     setTouched,

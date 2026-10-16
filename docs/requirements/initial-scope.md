@@ -48,3 +48,7 @@
 その後、他 tool を追加する。
 
 新規 tool は `docs/tools/<slug>/` の仕様書を追加してから実装する。
+
+## 初回再構築後の拡張
+
+分圧抵抗ツールへ無負荷・公称値のVin sweepグラフを追加する。現行の詳細は `docs/tools/voltage-divider/` を正本とし、上記の初回再構築scopeとは区別する。

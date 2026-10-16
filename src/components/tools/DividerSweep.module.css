@@ -1,0 +1,63 @@
+.number {
+  color: var(--blue-11);
+  font-size: 0.8rem;
+  margin-right: 0.6rem;
+}
+
+.content {
+  min-width: 0;
+}
+
+.range {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  max-width: 36rem;
+}
+
+.hint {
+  color: var(--gray-11);
+}
+
+.legend {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  font-size: 0.8rem;
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.numbers summary {
+  cursor: pointer;
+  padding-block: 0.75rem;
+}
+
+.tableScroll {
+  overflow-x: auto;
+}
+
+.tableScroll table {
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.8rem;
+}
+
+.tableScroll th,
+.tableScroll td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--gray-6);
+  white-space: nowrap;
+}
+
+@media (width < 768px) {
+  .range {
+    grid-template-columns: 1fr;
+  }
+}

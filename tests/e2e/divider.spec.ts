@@ -58,8 +58,10 @@ test('CSP と runtime error、ページ幅、ナビゲーション', async ({ pa
   expect(errors).toEqual([]);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   const results = await page.locator('#results').boundingBox();
+  const graph = await page.locator('#graph').boundingBox();
   const formula = await page.locator('#formula').boundingBox();
-  expect(formula!.y - (results!.y + results!.height)).toBeLessThan(100);
+  expect(graph!.y - (results!.y + results!.height)).toBeLessThan(100);
+  expect(formula!.y - (graph!.y + graph!.height)).toBeLessThan(100);
   await page.getByRole('button', { name: 'ナビゲーションを開閉' }).click();
   if (isMobile) {
     await expect(page.getByRole('dialog')).toBeVisible();
@@ -262,9 +264,18 @@ test('desktop overlay は sidebar 開閉と scroll 後も fixed、本文に余�
     expect(await nav.evaluate((element) => getComputedStyle(element).overflowY)).toBe('auto');
     expect(await nav.evaluate((element) => element.scrollHeight > element.clientHeight)).toBe(true);
     await nav.getByRole('link').first().focus();
-    await page.keyboard.press('Tab');
-    await page.keyboard.press('Tab');
+    for (let index = 1; index < (await nav.getByRole('link').count()); index++)
+      await page.keyboard.press('Tab');
     await expect(nav.getByRole('link').last()).toBeFocused();
+    // Firefoxのfocusによる内部scrollも完了を待ち、表示範囲の閾値は維持する。
+    await expect
+      .poll(() =>
+        nav
+          .getByRole('link')
+          .last()
+          .evaluate((element) => element.getBoundingClientRect().bottom),
+      )
+      .toBeLessThanOrEqual(small!.y + small!.height);
     const lastLink = await nav.getByRole('link').last().boundingBox();
     expect(lastLink!.y).toBeGreaterThanOrEqual(small!.y);
     expect(lastLink!.y + lastLink!.height).toBeLessThanOrEqual(small!.y + small!.height);

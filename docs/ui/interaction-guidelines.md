@@ -69,7 +69,7 @@ error 発生時に自動 focus 移動はしない。
 を併用する。
 背景は淡くし、文字可読性を優先する。
 
-将来 chart を追加した際:
+chart も候補表と同じ識別子・theme対応paletteを参照する:
 
 ```text
 checkbox color = candidate series color = chart series color = chart legend color

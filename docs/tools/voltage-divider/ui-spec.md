@@ -17,13 +17,13 @@ Breadcrumb を title 直上へ表示。
 1. Header / breadcrumb / title / short description
 2. Circuit + input
 3. Candidate result
-4. Formula / candidate selection explanation
+4. Vin–Vout graph（初期は閉じる）
+5. Formula / candidate selection explanation
 
 将来 section 追加:
 
 - tolerance
 - temperature
-- graph
 - advanced mode
 
 ## 3. Input
@@ -128,7 +128,7 @@ Multiple selection。
 
 - rank 1 のみ checked
 
-将来 graph の default series とする。
+graph の default series とする。
 
 Checked candidate:
 
@@ -140,12 +140,12 @@ Color mapping:
 
 ```text
 candidate table color
-= future graph series color
-= future legend color
+= graph series color
+= legend color
 ```
 
 候補の識別子に青 / 赤 / 緑 / 紫 / 橙の共通 palette を固定対応させる。選択順で色を変えない。
-色は theme / accessibility を考慮する。
+light / darkで同じ候補識別色の系統を維持する。darkの青・赤・紫はグラフ背景に対する3:1と白いcheck markの4.5:1を両立する明度へ補正し、候補表・legend・graphへ共通適用する。
 
 色だけに依存せず checkbox の check 状態も使う。
 
@@ -172,8 +172,15 @@ Vout = Vin × R2 / (R1 + R2)
 
 - `#input`
 - `#results`
+- `#graph`
 - `#formula`
 
 Floating navigation から移動可能。
 Mobile は current section + tap expand。
 Desktop は viewport 左下の同じ固定位置を使い、sidebar ON / OFF、main content 幅、scroll で横位置を変えない。
+
+## 13. Graph UI
+
+03 Vin–Voutグラフ、04 計算式の順に配置。表示buttonは `aria-expanded` / `aria-controls` を持つ。min / maxは既存 `EngineeringValueInput` を再利用しV単位、Desktopは2列、Mobileは1列。候補識別は番号・R1/R2・線種・既存paletteで示し、legendによる独立した選択は追加しない（候補表を正本とする）。現在Vin・目標Voutと、前回計算候補を使用中の未更新状態をテキスト表示する。
+
+EChartsは表示操作時だけdynamic importし、core / LineChart / Grid / MarkLine / SVGRendererのみ登録する。初期ロードと他ページへEChartsを含めない。SVG、ResizeObserver、OS theme変更、animation無効、unmount時disposeを扱う。ロード失敗はグラフ内で隔離し、主計算は維持する。グラフと同じ端点の数値表を開閉式で提供する。描画領域はMobileでもページ横overflowを発生させない。

@@ -1,6 +1,6 @@
 import '@radix-ui/themes/styles.css';
 import type { CSSProperties } from 'react';
-import { candidateSeriesColors } from '../../lib/candidate-colors';
+import { candidateSeriesCssColor } from '../../lib/candidate-colors';
 import { formatVoltageError, formatRelativeError } from '../../lib/formatters/divider-error';
 import { Button, Checkbox, Badge, Spinner } from '@radix-ui/themes';
 import { Calculator, RotateCcw, AlertTriangle } from 'lucide-react';
@@ -10,7 +10,8 @@ import { SystemTheme } from '../ui/SystemTheme';
 import { ToolBoundary } from '../ui/ToolBoundary';
 import { formatEngineering as fmt } from '../../lib/formatters/engineering';
 import { withBase } from '../../lib/site';
-import { useDividerState } from './divider-state';
+import { DividerSweep } from './DividerSweep';
+import { readFields, useDividerState } from './divider-state';
 import styles from './VoltageDivider.module.css';
 function Divider() {
   const state = useDividerState();
@@ -161,7 +162,7 @@ function Divider() {
                     key={c.rank}
                     data-selected={state.selected.includes(c.rank)}
                     style={
-                      { '--candidate-color': candidateSeriesColors[c.rank - 1] } as CSSProperties
+                      { '--candidate-color': candidateSeriesCssColor(c.rank) } as CSSProperties
                     }
                   >
                     <td>
@@ -205,6 +206,16 @@ function Divider() {
           </p>
         )}
       </section>
+      {result.ok && (
+        <DividerSweep
+          candidates={result.value.candidates.filter((c) => state.selected.includes(c.rank))}
+          nominalVin={state.resultVin}
+          revision={state.revision}
+          stale={state.stale}
+          vin={errors.vin ? undefined : readFields(fields).input.vin}
+          targetVout={errors.targetVout ? undefined : readFields(fields).input.targetVout}
+        />
+      )}
     </div>
   );
 }

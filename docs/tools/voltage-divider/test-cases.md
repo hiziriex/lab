@@ -165,3 +165,12 @@ Desktop 1440px:
 
 - オプション名と値入力は2行。label click / Space で ON / OFF、値と単位の enabled / disabled、値保持、accessible name と group を確認する。
 - review は Desktop sidebar 表示／非表示、Mobile input／candidate area を保存し、baseline は人間確認まで更新しない。
+
+## 14. Vin sweep graph
+
+- 既知の分圧比・複数候補・0 V開始・不正範囲・非有限値・不正抵抗・空選択・極端な抵抗値をunit検証。
+- 初期4～6 V、range編集・blur / Enter error・開閉保持・再計算とResetによるrange初期化をcomponent / browser検証。
+- table checkboxとseries / legendの一致、全解除、現在Vin / target Vout基準線と範囲外・無効値、stale候補維持、既存calculator操作を検証。
+- 初期はECharts chunk未取得、graphを開くと取得・SVG描画、閉じるとdispose、theme・resize・複数browser・keyboard・axeを確認。
+- Desktop / Pixel 7 / 320pxでoverflowと操作性を確認。Desktop / Mobileの比較画像を生成し、baselineは人間の承認まで変更しない。
+- bundle / Lighthouseで変更前と比較する。

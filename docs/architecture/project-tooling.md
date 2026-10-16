@@ -87,7 +87,7 @@ endOfLine: lf
 - Apache ECharts: graph
 - Lucide: icon
 
-ECharts は初版分圧ツールでは graph を表示しないが、基盤として採用する。
+ECharts は分圧ツールのグラフを開いた時だけ必要なmoduleを遅延読み込みする。初回再構築では基盤依存のみとし、Vin sweep追加から利用する。
 
 ## 11. Circuit asset
 

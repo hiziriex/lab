@@ -12,7 +12,6 @@ URL: `/tools/voltage-divider/`
 
 - 抵抗公差解析
 - 温度係数 / TCR
-- graph
 - ADC sensing mode
 - comparator / EN / UVLO 等 threshold mode
 
@@ -108,7 +107,14 @@ KaTeX で表示。
 
 - tolerance analysis
 - TCR
-- chart
 - input URL sharing
 - localStorage
 - result copy
+
+## 9. Vin sweepグラフ
+
+無負荷・公称抵抗の Vin–Vout 特性を候補表の後に表示する。初期は閉じ、「グラフを表示」で必要時に開く。候補表の複数選択・固定色を共有し、未選択時は選択を促す。抵抗公差、TCR、温度、負荷、derating、対数軸、export、URL共有は含まない。
+
+横軸 Vin / 縦軸 Vout、単位 V。主入力の現在の有効な Vin を縦の破線、目標 Vout を横の破線で示し、値をテキストでも表示する。主入力変更後の抵抗は前回計算の候補であることを明示する。主入力が不正なら該当基準線を非表示とし、再入力を案内する。Vin がsweep範囲外なら数値と範囲外である旨を表示する。
+
+範囲は計算済み Vin の80～120%で初期化し、再計算・Resetで初期化する。初期範囲の入力表示は12有効数字に整え、点列の計算結果は丸めない。開閉だけでは範囲を失わない。min / max編集で有効ならグラフを即時更新する。非数値・非有限値、min < 0、max <= minは拒否し、不正な範囲のグラフは表示しない。blur / Enterでfield errorを表示し、入力中は範囲確認の案内を表示する。範囲エラーは主計算を妨げない。
