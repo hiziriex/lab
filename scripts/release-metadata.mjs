@@ -21,5 +21,22 @@ const section =
         .join('\n')
         .trim();
 if (!section) throw new Error('CHANGELOG に対象 version がありません');
+const readme = fs.readFileSync('README.md', 'utf8');
+const versionSections = readme
+  .replace(/\r\n/g, '\n')
+  .split(/^## /m)
+  .filter((section) => section.startsWith('現在のバージョン\n'));
+const versionLinks = [
+  ...(versionSections[0] || '').matchAll(
+    /\*\*\[(v[^\]\n]+)\]\((https:\/\/github\.com\/hiziriex\/lab\/releases\/tag\/[^)\s]+)\)\*\*/g,
+  ),
+];
+if (
+  versionSections.length !== 1 ||
+  versionLinks.length !== 1 ||
+  versionLinks[0][1] !== tag ||
+  versionLinks[0][2] !== `https://github.com/hiziriex/lab/releases/tag/${tag}`
+)
+  throw new Error('README の現在のバージョン・Release リンクが package version と一致しません');
 fs.writeFileSync('/tmp/lab-release-notes.md', section);
 console.log(`Release metadata OK: ${tag}`);

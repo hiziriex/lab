@@ -39,8 +39,12 @@ SemVer。
 同期対象:
 
 - `package.json` version
+- CHANGELOG の対象 version section
+- README の「現在のバージョン」の表示と GitHub Release リンク
 - Git tag
 - GitHub Release
+
+Release preparation では、人間が確定した version に合わせて `package.json`、CHANGELOG、README の表示 version と Release リンクを明示的に更新する。README は `## 現在のバージョン` 節内の `**[vX.Y.Z](https://github.com/hiziriex/lab/releases/tag/vX.Y.Z)**` を同期対象とし、検証scriptは自動更新しない。
 
 version候補はCodexが提案してよいが、最終決定は人間。明示されたversionの公開承認とRelease Transactionは [Approval Policy §2・9](../automation/approval-policy.md) に従う。
 
@@ -88,6 +92,9 @@ Release 添付 artifact は初期版では不要。
 - working tree clean
 - CHANGELOG
 - package version
+- README の現在 version・Release リンクと package version / Git tag の一致
+
+`scripts/release-metadata.mjs` は対象 tag と package version、CHANGELOG の対象 section、README の現在 version と Release リンクを検証する。README の記載欠落・不正・不一致は失敗とし、更新漏れを公開前に検出する。ローカルの `release-check.sh` と既存の Release workflow が同じscriptを使用する。
 
 release check自体は通常の検証として実行できる。公開操作の承認・停止・再開条件はApproval Policy §9に従う。
 
