@@ -75,6 +75,8 @@ Desktop section navigation は sidebar 表示・非表示、overlay の有無、
 
 Pixel 7 の review は初期 full page に加え、collapsed / expanded / scrolled の viewport 画像を保存し、expanded 状態でも axe を確認する。
 
+人間確認用の画像・Visual比較結果・最終review report・検証結果の要約は、原則として`review-artifacts/`以下の1つのZIPへまとめる。不要な重複画像や巨大な一時ログは含めず、ZIPとreview成果物はcommitしない。
+
 ## 6. Retry
 
 - Playwright CI: 1 retry

@@ -161,11 +161,13 @@ function Divider() {
                   <tr
                     key={c.rank}
                     data-selected={state.selected.includes(c.rank)}
+                    data-focused={state.focused === c.rank}
+                    onClick={() => state.setFocused(c.rank)}
                     style={
                       { '--candidate-color': candidateSeriesCssColor(c.rank) } as CSSProperties
                     }
                   >
-                    <td>
+                    <td onClick={(e) => e.stopPropagation()}>
                       <Checkbox
                         className={styles.candidateCheckbox}
                         aria-label={`候補 ${c.rank} を比較`}
@@ -177,7 +179,10 @@ function Divider() {
                         }
                       />
                     </td>
-                    <td>{fmt(c.r1, 'Ω')}</td>
+                    <td>
+                      {fmt(c.r1, 'Ω')}
+                      {state.focused === c.rank && <span className="sr-only">（注目候補）</span>}
+                    </td>
                     <td>{fmt(c.r2, 'Ω')}</td>
                     <td>{fmt(c.actualVout, 'V')}</td>
                     <td>
@@ -208,7 +213,11 @@ function Divider() {
       </section>
       {result.ok && (
         <DividerSweep
-          candidates={result.value.candidates.filter((c) => state.selected.includes(c.rank))}
+          candidates={result.value.candidates}
+          selected={state.selected}
+          focused={state.focused}
+          onFocusCandidate={state.setFocused}
+          designTargetVout={state.resultTargetVout}
           nominalVin={state.resultVin}
           revision={state.revision}
           stale={state.stale}

@@ -170,7 +170,38 @@ Desktop 1440px:
 
 - 既知の分圧比・複数候補・0 V開始・不正範囲・非有限値・不正抵抗・空選択・極端な抵抗値をunit検証。
 - 初期4～6 V、range編集・blur / Enter error・開閉保持・再計算とResetによるrange初期化をcomponent / browser検証。
-- table checkboxとseries / legendの一致、全解除、現在Vin / target Vout基準線と範囲外・無効値、stale候補維持、既存calculator操作を検証。
+- 候補比較でのtable checkboxとseries / legendの一致、全解除、現在Vin / target Vout基準線と範囲外・無効値、stale候補維持、既存calculator操作を検証。
 - 初期はECharts chunk未取得、graphを開くと取得・SVG描画、閉じるとdispose、theme・resize・複数browser・keyboard・axeを確認。
 - Desktop / Pixel 7 / 320pxでoverflowと操作性を確認。Desktop / Mobileの比較画像を生成し、baselineは人間の承認まで変更しない。
 - bundle / Lighthouseで変更前と比較する。
+
+## 15. Panel・2モード・A/B計測
+
+- 出力特性は注目1候補のみ。select / 行clickで注目候補を切り替え、checkbox比較対象を変えない。checkbox操作で注目を変えない。
+- 候補比較はチェック済みseriesのみ、Vout誤差の符号と0 mV基準線を検証する。
+- k_candidate / k_target / Vout_candidate / Vout_ideal / Vout_errorの定義、nominalでの理想値一致、正・負・zeroを確認する。
+- hoverの連続Vin・候補識別・値、A/B配置のtap / click / 数値入力、配置先選択、個別・全解除を確認する。
+- A/Bの順を維持し、Bが左でもΔVin / ΔVout / ΔErrorはB − A。出力・誤差の傾き、同一Vinでのnull / 「—」、内部値精度を検証する。
+- keyboardによるPanel開閉・モード・select・カーソル操作、light / dark axe、Desktop / Mobile / 320pxのreflow、遅延ロード、既存calculator回帰を確認する。
+- 今回分のVisual Regression差分を生成する。既存承認済みbaselineを保持し、新たな人間承認まで更新しない。
+
+## 16. Compact UIとcursor再設計
+
+- A単独 / B単独 / 両選択 / 未選択のgraph操作、連動時の正負ΔVin維持、両端での共通移動制限、欠けたcursorの初期化を確認する。
+- toggleのaria-pressed、keyboard ← / → / Shift、touch tap、個別× / Clear、direct inputのEnter / blur / Escapeと範囲エラーを確認する。
+- 長い内部値の表示のみ短くformatし、未編集のfocus / blurで内部値を変えない。任意精度を入力できる。
+- 出力特性は実線・legendなし・表示候補あり。比較はselectなし・誤差matrix、ΔVout表記なし。「グラフの数値」は存在しない。
+- hoverのX/Y表示、現在Vin / Targetのgraph内ラベル、amber / orangeのA/B識別を確認する。
+- Desktopはgraphと測定表が同時にviewport内へ収まる2列、Mobileは直下のcompact領域、320pxと全候補時もページ横overflowなし。両mode / light-darkでaxeを確認する。
+- 既存calculator / unit / browser / Storybook回帰を維持し、bundle・Lighthouse・実表示・Visual diffを保存。baselineは新しい人間承認まで更新しない。
+
+
+### Cursor drag・初回選択・背景
+
+- A未配置の初回click / tapだけAをOFF、BをONにする。既存A移動・B配置・両選択・drag・数値入力では交替しない。個別削除後も初回切替を繰り返さない。
+- A/B各線のmouse / touch pointer capture、drag中の内部値・表示更新、単独drag後の選択、hover抑制を検証する。
+- 両選択でどちらの線を掴んでもΔVinを保持し、左方向と両端でもB − Aの負符号を維持する。
+- 通常48pxのhit areaとtouch-action、同位置で左右24pxずつに分割されることを検証する。
+- 線上のdragと空いたplotのclick / tap、direct input、削除、keyboard回帰を確認する。
+- light背景は白、dark背景は専用暗色。Desktop / Pixel 7の両mode・両theme、320px・全候補で実表示とaxeを確認する。Pixel 7 dragはCDPのtouchイベントも使用する。
+- Desktop / Pixel 7のVisual差分と開いたPanelのlight / dark画像を人間確認へ渡す。人間承認後に対象baselineだけを更新し、再比較で差分解消を確認する。

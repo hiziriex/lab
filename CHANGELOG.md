@@ -6,6 +6,14 @@
 
 ### Changed
 
+- グラフPanel・cursor改善の人間Visual承認後、Desktop Chromium / Pixel 7の画像比較baselineを更新。
+
+- 分圧グラフにmouse / touchのA/B drag、初回A配置後だけBへ切替、近接cursorのhit area分割、light / dark専用描画背景を追加。常時操作説明を削減。
+
+- グラフ条件と測定UIを圧縮し、Desktopでgraphと結果を2列表示。A/B独立toggle、ΔVinを保つ連動移動、短いdirect input、graph内X/Y hoverと基準値ラベルへ再設計。
+
+- Vin sweepを開閉Panel化し、注目候補の出力特性とcheckbox候補の符号付きmV誤差比較へ分離。hover値とA/Bカーソル、B − Aの差分・傾き、keyboard数値入力を追加。
+
 - 人間承認済みの Desktop Chromium / Pixel 7 の画像比較baselineをVin sweepグラフ追加に合わせて更新。
 
 - Release metadata検証にREADMEの現在versionとGitHub Releaseリンクを追加し、Release preparationでの更新漏れを検出。

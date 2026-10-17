@@ -128,7 +128,7 @@ Multiple selection。
 
 - rank 1 のみ checked
 
-graph の default series とする。
+候補比較の初期seriesとする。注目候補は独立してrank 1で初期化する。
 
 Checked candidate:
 
@@ -181,6 +181,29 @@ Desktop は viewport 左下の同じ固定位置を使い、sidebar ON / OFF、m
 
 ## 13. Graph UI
 
-03 Vin–Voutグラフ、04 計算式の順に配置。表示buttonは `aria-expanded` / `aria-controls` を持つ。min / maxは既存 `EngineeringValueInput` を再利用しV単位、Desktopは2列、Mobileは1列。候補識別は番号・R1/R2・線種・既存paletteで示し、legendによる独立した選択は追加しない（候補表を正本とする）。現在Vin・目標Voutと、前回計算候補を使用中の未更新状態をテキスト表示する。
+Panel見出しは「グラフ」。header全体の開閉と右端の表示／閉じる表示、`aria-expanded` / `aria-controls`を維持する。開閉ではモード・範囲・カーソルを保持する。冒頭の長い説明、別行の現在Vin / 目標Vout表示、出力特性のlegend、端点数値一覧「グラフの数値」は設けない。
 
-EChartsは表示操作時だけdynamic importし、core / LineChart / Grid / MarkLine / SVGRendererのみ登録する。初期ロードと他ページへEChartsを含めない。SVG、ResizeObserver、OS theme変更、animation無効、unmount時disposeを扱う。ロード失敗はグラフ内で隔離し、主計算は維持する。グラフと同じ端点の数値表を開閉式で提供する。描画領域はMobileでもページ横overflowを発生させない。
+Radix SegmentedControlで出力特性 / 候補比較を切り替える。出力特性は注目1候補の実線、表示候補selectを表示。候補比較はcheckbox選択候補の符号付きVout誤差 [mV]、0 mV基準線と比較legendを表示し、表示候補selectを非表示とする。候補の色・比較用線種は従来のpaletteを共有する。理想比は主計算済みの設計条件を使用し、比較モードに短く表示する。
+
+行click / selectは注目候補だけを変更し、checkboxは比較対象だけを変更する。checkbox cellはclickを行へ伝播させない。候補表内にradioは追加しない。現在Vinには「5 V」、目標Voutには「Target 3.3 V」等のラベルをグラフ内に直接表示する。不正な主入力の該当線は非表示とし、範囲外Vin・未更新候補は短いstatusで通知する。
+
+条件をPanel上端に横並び・折返しでまとめ、Vin min / maxは既存EngineeringValueInputの数値・単位機能を保って小さい可視ラベルを添える。Desktop（1024px以上）は左graph / 右cursor・結果の2列。graphは幅に応じた7:5のaspect ratio（最小高さ15rem）とし、不自然に横長にしない。Mobileはgraph、compact cursor操作、1つの測定領域の順。A/Bカードは並べずtableに集約する。全候補時もページ横overflowを生まない。
+
+cursor toolbarは `[A] [Vin入力 V] [×]` / `[B] [Vin入力 V] [×]`。A/Bは独立toggleで`aria-pressed`を持ち、初期はAのみ選択。選択したcursorをgraphのclick / tapで移動する。未配置Aの初回graph配置だけAをOFF、BをONへ切り替える。既存Aの移動、B配置、両選択、drag、数値入力では切り替えない。個別削除やClearでは初回フラグを戻さず、範囲編集・再計算・Resetで戻す。両選択はAを指定位置へ移す共通移動量を適用し、両方が範囲内に残るよう制限する。両cursorが存在しない／片方が欠けているときは選択cursorを指定位置へ初期化する。未選択ではgraph操作で移動しない。Aはamber、Bはorange。背景に合わせたlight / dark色、A/Bラベルと異なる線種を併用する。
+
+graphはkeyboard focus可能。← / →は範囲幅の1%、Shift併用は0.1%の相対移動。任意の連続値へ加算しgrid snapはしない。数値入力はその行だけを変更し、Enter / blurで確定、Escapeで取消。通常は小数4桁、極小・極大値は指数表記。任意精度の入力値を内部保持し、未編集のfocus / blurでは表示丸め値を再取り込みしない。不正・範囲外入力は計測値へ反映せずfield errorとする。各×は当該cursorのみ削除、小さいClearは両方削除。touch targetは24px以上を保つ。
+
+出力結果はA/BのVin / Vout、ΔVin、ΔVout、ΔVout / ΔVinをtableで表示。比較結果は共通ΔVinと候補ごとのA/B誤差、ΔError、ΔError / ΔVinをmatrix tableで表示する。差分はB − A、左右順に並べ替えない。同一Vinの傾きは「—」。A/BのVinはモード・注目候補変更で保持し再評価、範囲編集・主再計算・Resetで解除する。
+
+hoverは連続Vinから再計算し、X / Y axisPointerと小さいgraph内overlayで表示する。Y pointerは先頭表示候補の曲線上の値を指し、比較overlayには全選択候補の誤差を表示する。別の大きなhover cardは作らない。sampleや表示値から再計算しない。EChartsは初回Panel表示まで遅延読み込み、core / Line / Grid / MarkLine / AxisPointer / Tooltip / SVGを登録。theme・resize・dispose・ToolBoundary・animation無効を維持する。hoverなしでもtapとdirect inputで計測可能。
+
+nominal構造と既存の候補・理想出力・誤差定義は維持する。公差 / min-max band / TCR / 温度 / 負荷 / snapは今回実装しない。
+
+
+### Cursor dragと測定背景
+
+mouse / touch共通のPointer Eventsとpointer captureでcursor線を直接dragする。drag開始時の値とpointer位置を保持し、連続Vinの移動量を開始値へ加算するため、掴んだoffsetで線が跳ねない。単独dragは掴んだcursorだけを選択・移動。両toggle ONではどちらを掴んでも同量を加算し、B − Aを保持して両方が範囲内に残るよう移動量を制限する。drag中も結果を更新し、hoverを隠す。cancelでは最後の有効位置を保持する。
+
+細いamber / orange線の周囲に透明な48px幅のtouch領域を置く。近接時は中間点で領域を分割し、同位置ではAを左側24px、Bを右側24pxから掴める。線上はdragを優先し、空いたplotのclick / tapとkeyboard移動・direct inputは維持する。説明はsr-onlyへ移し、常時表示の移動対象・keyboard説明を削除する。
+
+chart背景はlightで白、darkで専用の暗色`#101214`、境界はthemeのgray-6。Panelとの区別とaxis / grid / series / 基準線 / crosshair / A/Bのcontrastを確保する。Desktop / Pixel 7のlight / dark、live drag、連動端、負のB − A、近接hit area、個別削除、数値入力、keyboard、axeを検証し、画像差分を人間確認へ渡し、baselineは人間承認後のみ更新する。

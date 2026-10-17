@@ -41,13 +41,52 @@ export function calculateVoltageDividerSweep({
     ok: true,
     value: {
       series: candidates.map((candidate) => {
-        const scale = Math.max(candidate.r1, candidate.r2);
-        const ratio = candidate.r2 / scale / (candidate.r1 / scale + candidate.r2 / scale);
+        const ratio = calculateCandidateRatio(candidate);
         return {
           ...candidate,
           points: [vinMin, vinMax].map((vin) => ({ vin, vout: vin * ratio })),
         };
       }),
+    },
+  };
+}
+
+export type SweepMode = 'output' | 'comparison';
+export type SweepDesign = { nominalVin: number; targetVout: number };
+// nominalを包む構造を共通化し、後続のmin / maxを追加する場所を確保する。
+export type SweepReading = { vin: number; nominal: { vout: number; ideal: number; error: number } };
+export function calculateCandidateRatio({ r1, r2 }: Pick<SweepCandidate, 'r1' | 'r2'>): number {
+  const scale = Math.max(r1, r2);
+  return r2 / scale / (r1 / scale + r2 / scale);
+}
+export function calculateTargetRatio({ nominalVin, targetVout }: SweepDesign): number {
+  return targetVout / nominalVin;
+}
+// 呼び出し側で検証済みの候補・設計・Vinを使う。描画sampleや表示文字列を参照しない。
+export function calculateSweepReading({
+  candidate,
+  design,
+  vin,
+}: {
+  candidate: SweepCandidate;
+  design: SweepDesign;
+  vin: number;
+}): SweepReading {
+  const vout = vin * calculateCandidateRatio(candidate);
+  const ideal = vin * calculateTargetRatio(design);
+  return { vin, nominal: { vout, ideal, error: vout - ideal } };
+}
+export function calculateSweepDelta({ a, b }: { a: SweepReading; b: SweepReading }) {
+  const vin = b.vin - a.vin;
+  const vout = b.nominal.vout - a.nominal.vout;
+  const error = b.nominal.error - a.nominal.error;
+  return {
+    vin,
+    nominal: {
+      vout,
+      error,
+      outputSlope: vin === 0 ? null : vout / vin,
+      errorSlope: vin === 0 ? null : error / vin,
     },
   };
 }

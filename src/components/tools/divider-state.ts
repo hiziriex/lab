@@ -56,6 +56,7 @@ export function useDividerState() {
   const [touched, setTouched] = useState<Partial<Record<keyof DividerFields, boolean>>>({});
   const [busy, setBusy] = useState(false);
   const [revision, setRevision] = useState(0);
+  const [focused, setFocused] = useState(1);
   const [selected, setSelected] = useState([1]);
   const { input, errors } = readFields(fields);
   const invalid = Object.keys(errors).length > 0;
@@ -68,6 +69,7 @@ export function useDividerState() {
       setResult(calculateVoltageDivider(input));
       setLastFields(fields);
       setSelected([1]);
+      setFocused(1);
       setRevision((n) => n + 1);
       setBusy(false);
     }, 0);
@@ -78,6 +80,7 @@ export function useDividerState() {
     setResult(calculateVoltageDivider(readFields(defaultFields).input));
     setTouched({});
     setSelected([1]);
+    setFocused(1);
     setRevision((n) => n + 1);
   }
   return {
@@ -90,6 +93,8 @@ export function useDividerState() {
     setTouched,
     busy,
     revision,
+    focused,
+    setFocused,
     selected,
     setSelected,
     errors,

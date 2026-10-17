@@ -152,3 +152,37 @@ Calculator は `CalculationResult<T>` パターンに従う。
 `calculateVoltageDividerSweep({ candidates, vinMin, vinMax })` は選択済み公称抵抗を受け取り、候補ごとに両端の `{ vin, vout }` 点を返す純粋関数とする。無負荷では一次関数なので端点間を直線で結ぶ。candidate識別子・抵抗値・点列を持つseriesとし、将来の帯データは別フィールドとして追加できる。
 
 `Vout = Vin × R2 / (R1 + R2)`。抵抗和のoverflowを避けるため、抵抗値を最大値で正規化して分圧比を求める。単位は V / Ω、内部は丸めない。範囲は有限かつ `0 <= vinMin < vinMax`、抵抗は有限かつ正。想定内エラーは既存の `CalculationResult` で返す。空選択は空seriesの成功結果とし、UIで案内する。
+
+## 14. モード・連続座標・A/B計測
+
+- `k_candidate = R2 / (R1 + R2)`（overflow回避の正規化を使用）
+- `k_target = Vout_target / Vin_nominal`（主計算済みの設計条件）
+- `Vout_candidate(Vin) = Vin × k_candidate`
+- `Vout_ideal(Vin) = Vin × k_target`。設計Vinでは目標Voutに一致する。
+- `Vout_error(Vin) = Vout_candidate(Vin) - Vout_ideal(Vin)`。内部V、UIはmV。正は理想より高く、負は低い。絶対値にはしない。
+
+`calculateCandidateRatio` / `calculateTargetRatio` / `calculateSweepReading` / `calculateSweepDelta` は純粋関数とし、検証済みの候補・設計値・Vinを受け取る。readingは `{ vin, nominal: { vout, ideal, error } }`、差分も `nominal` 内へ値・傾きをまとめ、将来のmin / maxを別フィールドで追加可能とする。
+
+`ΔVin = Vin_B - Vin_A`、`ΔVout = Vout_B - Vout_A`、`ΔError = Error_B - Error_A`。傾きはそれぞれ `ΔVout / ΔVin`、`ΔError / ΔVin`。A/Bを左右順に並べ替えない。`ΔVin === 0` では除算せず傾きをnullで返しUIで「—」とする。JavaScript numberの内部精度を維持し、最後だけformatterを通す。click / tap / hoverはpixelから連続Vinへ変換し、sample点へ丸めない。
+
+## 15. Cursorの連動移動
+
+`calculateSweepCursorMove`は純粋関数としてcursor位置・独立toggle・連続位置指定または相対移動量・有効範囲を受け取る。両選択でA/Bが存在する場合、共通移動量を次の範囲へ制限して両方に加える。
+
+```text
+desired_shift = target_Vin - Vin_A
+min_shift = Vin_min - min(Vin_A, Vin_B)
+max_shift = Vin_max - max(Vin_A, Vin_B)
+shift = clamp(desired_shift, min_shift, max_shift)
+Vin_A_new = Vin_A + shift
+Vin_B_new = Vin_B + shift
+```
+
+差分の意味はB − Aのまま、移動前後でΔVinを保持する（numberの浮動小数点精度内）。単独選択はそのcursorだけを範囲内へ移動し、未選択は移動しない。欠けた選択cursorは指定位置へ初期化する。keyboardの相対量は範囲幅の1% / Shiftで0.1%であり、gridへの丸めはしない。direct inputはtoggleに関係なく当該cursorだけを更新する。
+
+
+### Cursor dragの移動量
+
+純粋関数`calculateSweepCursorDrag`はdrag開始時のcursor位置・選択状態・掴んだcursor・連続Vinの移動量を受け取る。pixel座標からのVin移動量は`(現在clientX − 開始clientX) / plot幅 × (Vin_max − Vin_min)`。掴んだoffsetを保持し、丸め・snapは行わない。
+
+両選択時は§15の共通移動量制限を適用し、それ以外は掴んだcursorだけへ加算する。毎回開始値から再計算し、累積加算によるずれを避ける。Bを掴んだ場合もA基準の絶対指定へ置き換えず、同じ相対移動量を両方へ加算する。左右の順序・差分の符号・ΔVin=0の未定義処理を維持する。
