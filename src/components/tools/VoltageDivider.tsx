@@ -1,6 +1,6 @@
 import '@radix-ui/themes/styles.css';
 import type { CSSProperties } from 'react';
-import { candidateSeriesColors } from '../../lib/candidate-colors';
+import { candidateSeriesCssColor } from '../../lib/candidate-colors';
 import { formatVoltageError, formatRelativeError } from '../../lib/formatters/divider-error';
 import { Button, Checkbox, Badge, Spinner } from '@radix-ui/themes';
 import { Calculator, RotateCcw, AlertTriangle } from 'lucide-react';
@@ -10,7 +10,8 @@ import { SystemTheme } from '../ui/SystemTheme';
 import { ToolBoundary } from '../ui/ToolBoundary';
 import { formatEngineering as fmt } from '../../lib/formatters/engineering';
 import { withBase } from '../../lib/site';
-import { useDividerState } from './divider-state';
+import { DividerSweep } from './DividerSweep';
+import { readFields, useDividerState } from './divider-state';
 import styles from './VoltageDivider.module.css';
 function Divider() {
   const state = useDividerState();
@@ -160,11 +161,13 @@ function Divider() {
                   <tr
                     key={c.rank}
                     data-selected={state.selected.includes(c.rank)}
+                    data-focused={state.focused === c.rank}
+                    onClick={() => state.setFocused(c.rank)}
                     style={
-                      { '--candidate-color': candidateSeriesColors[c.rank - 1] } as CSSProperties
+                      { '--candidate-color': candidateSeriesCssColor(c.rank) } as CSSProperties
                     }
                   >
-                    <td>
+                    <td onClick={(e) => e.stopPropagation()}>
                       <Checkbox
                         className={styles.candidateCheckbox}
                         aria-label={`候補 ${c.rank} を比較`}
@@ -176,7 +179,10 @@ function Divider() {
                         }
                       />
                     </td>
-                    <td>{fmt(c.r1, 'Ω')}</td>
+                    <td>
+                      {fmt(c.r1, 'Ω')}
+                      {state.focused === c.rank && <span className="sr-only">（注目候補）</span>}
+                    </td>
                     <td>{fmt(c.r2, 'Ω')}</td>
                     <td>{fmt(c.actualVout, 'V')}</td>
                     <td>
@@ -205,6 +211,20 @@ function Divider() {
           </p>
         )}
       </section>
+      {result.ok && (
+        <DividerSweep
+          candidates={result.value.candidates}
+          selected={state.selected}
+          focused={state.focused}
+          onFocusCandidate={state.setFocused}
+          designTargetVout={state.resultTargetVout}
+          nominalVin={state.resultVin}
+          revision={state.revision}
+          stale={state.stale}
+          vin={errors.vin ? undefined : readFields(fields).input.vin}
+          targetVout={errors.targetVout ? undefined : readFields(fields).input.targetVout}
+        />
+      )}
     </div>
   );
 }

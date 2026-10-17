@@ -1,0 +1,47 @@
+.plot {
+  position: relative;
+  min-width: 0;
+  border: 1px solid var(--gray-6);
+  border-radius: 4px;
+  background: light-dark(#fff, #101214);
+}
+
+.chart {
+  width: 100%;
+  aspect-ratio: 7 / 5;
+  min-height: 15rem;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.hover {
+  position: absolute;
+  top: 2.3rem;
+  right: 1.3rem;
+  display: grid;
+  padding: 0.2rem 0.35rem;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--color-background) 92%, transparent);
+  font-size: 0.7rem;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+  max-width: calc(100% - 5rem);
+}
+
+.handles {
+  position: absolute;
+  inset: 35px 20px 55px 60px;
+  pointer-events: none;
+}
+
+.handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: ew-resize;
+  touch-action: none;
+  pointer-events: auto;
+}

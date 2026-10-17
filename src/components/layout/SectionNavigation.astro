@@ -6,7 +6,8 @@
     <div>
       <a href="#input">01 回路と入力</a>
       <a href="#results">02 抵抗候補</a>
-      <a href="#formula">03 計算式</a>
+      <a href="#graph">03 Vin–Voutグラフ</a>
+      <a href="#formula">04 計算式</a>
     </div>
   </details>
 </nav>
@@ -82,6 +83,7 @@
   const labels: Record<string, string> = {
     input: '回路と入力',
     results: '抵抗候補',
+    graph: 'Vin–Voutグラフ',
     formula: '計算式',
   };
   const observer = new IntersectionObserver(
@@ -102,9 +104,13 @@
       summary.focus();
     }
   });
-  details.querySelectorAll('a').forEach((a) =>
+  details.querySelectorAll('a').forEach((a) => {
+    // Firefoxのnative focus scrollは文字だけを露出させる場合があるため、link全体を収める。
+    a.addEventListener('focus', () =>
+      a.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'instant' }),
+    );
     a.addEventListener('click', () => {
       if (!media.matches) details.open = false;
-    }),
-  );
+    });
+  });
 </script>
