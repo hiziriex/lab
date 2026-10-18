@@ -21,6 +21,8 @@
 .scroller {
   position: relative;
   overflow-x: auto;
+  width: max-content;
+  max-width: 100%;
   border: 1px solid var(--line);
   border-radius: 6px;
   margin-bottom: 0.75rem;
@@ -29,11 +31,10 @@
 }
 
 .table {
-  width: 100%;
-  min-width: 960px;
+  width: max-content;
   border-collapse: separate;
   border-spacing: 0;
-  table-layout: fixed;
+  table-layout: auto;
   font-family: var(--font-sans);
   color: var(--ink);
   font-size: 0.9rem;
@@ -46,47 +47,50 @@
   background: var(--panel);
   border-bottom: 2px solid var(--line);
   border-right: 1px solid var(--line);
-  padding: 0.65rem 0.5rem;
+  padding: 0.5rem 0.375rem;
   color: var(--accent);
-}
-
-.table th:nth-child(-n + 4) {
-  width: 120px;
 }
 
 .heading {
   position: relative;
   color: var(--accent);
-  display: flex;
+  display: grid;
+  grid-template-columns: max-content max-content 30px;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
+  gap: 4px;
+  white-space: nowrap;
 }
 
 .heading strong {
-  display: block;
-  font-size: 1rem;
+  font-size: 0.875rem;
 }
 
-.table small,
 .heading small {
-  display: block;
   color: var(--muted);
   font-weight: 400;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   white-space: nowrap;
 }
 
 .copy {
-  flex-shrink: 0;
-  width: 36px;
-  height: 36px;
+  position: relative;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  color: var(--muted);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.copy::after {
+  content: '';
+  position: absolute;
+  inset: -5px;
 }
 
 .table td {
-  height: 30px;
-  padding: 0.25rem;
+  height: 28px;
+  padding: 0.2rem 0.4rem;
   border-bottom: 1px solid var(--line);
   border-right: 1px solid var(--line);
   white-space: nowrap;
@@ -115,21 +119,15 @@
   font-weight: 500;
 }
 
-.e192 {
-  min-width: 680px;
-}
-
-.e192 th:nth-child(n) {
-  width: auto;
-}
-
 .standaloneHeading {
   display: flex;
   margin-bottom: 0.5rem;
 }
 
 .failure {
-  display: block;
+  grid-column: 1 / -1;
+  max-width: 12ch;
+  white-space: normal;
   color: var(--ink);
   font-size: 0.75rem;
   font-weight: 400;

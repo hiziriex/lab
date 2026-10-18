@@ -20,13 +20,13 @@ const every = (values: readonly number[], step: number) =>
   values.filter((_, index) => index % step === 0);
 
 export const E_SERIES = {
-  E3: { values: every(e24, 8), digits: 2, tolerance: '例 ±40%' },
-  E6: { values: every(e24, 4), digits: 2, tolerance: '例 ±20%' },
-  E12: { values: every(e24, 2), digits: 2, tolerance: '例 ±10%' },
-  E24: { values: e24, digits: 2, tolerance: '例 ±5%' },
-  E48: { values: every(e192, 4), digits: 3, tolerance: '例 ±2%' },
-  E96: { values: every(e192, 2), digits: 3, tolerance: '例 ±1%' },
-  E192: { values: e192, digits: 3, tolerance: '例 ±0.5%' },
+  E3: { values: every(e24, 8), digits: 2, tolerance: '±40%' },
+  E6: { values: every(e24, 4), digits: 2, tolerance: '±20%' },
+  E12: { values: every(e24, 2), digits: 2, tolerance: '±10%' },
+  E24: { values: e24, digits: 2, tolerance: '±5%' },
+  E48: { values: every(e192, 4), digits: 3, tolerance: '±2%' },
+  E96: { values: every(e192, 2), digits: 3, tolerance: '±1%' },
+  E192: { values: e192, digits: 3, tolerance: '±0.5%' },
 } as const;
 export type ESeriesName = keyof typeof E_SERIES;
 export const MAIN_SERIES = ['E3', 'E6', 'E12', 'E24', 'E48', 'E96'] as const;

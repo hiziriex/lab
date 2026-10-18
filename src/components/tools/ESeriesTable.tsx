@@ -37,9 +37,9 @@ function CopySeries({ name }: { name: ESeriesName }) {
         onClick={() => void copy()}
       >
         {state === 'copied' ? (
-          <Check size={16} aria-hidden="true" />
+          <Check size={14} aria-hidden="true" />
         ) : (
-          <Copy size={16} aria-hidden="true" />
+          <Copy size={14} aria-hidden="true" />
         )}
       </IconButton>
       <span className={state === 'failed' ? styles.failure : 'sr-only'} role="status">
@@ -56,10 +56,8 @@ function CopySeries({ name }: { name: ESeriesName }) {
 function SeriesHeading({ name }: { name: ESeriesName }) {
   return (
     <div className={styles.heading}>
-      <div>
-        <strong>{name}</strong>
-        <small>{E_SERIES[name].tolerance}</small>
-      </div>
+      <strong>{name}</strong>
+      <small>{E_SERIES[name].tolerance}</small>
       <CopySeries name={name} />
     </div>
   );
@@ -75,7 +73,7 @@ function Tables() {
           E3〜E24は2桁、E48以降は3桁の整数表記です（47と470は桁を揃えると同じ値）。
         </p>
         <p id="comparison-note" className={styles.note}>
-          E24の24行を基準に、各系列を昇順で配置しています。E48は1行2値、E96は1行4値です。ヘッダの公差は代表例です。
+          E24の24行を基準に、各系列を昇順で配置しています。E48は1行2値、E96は1行4値です。
         </p>
         <p className={styles.scrollHint}>
           <ArrowLeftRight size={16} aria-hidden="true" />{' '}
@@ -149,8 +147,7 @@ function Tables() {
           ただしE24はE48／E96の部分集合ではありません（例：27と274は別の値）。
         </p>
         <p id="tolerance-note" className={styles.note}>
-          系列から部品の公差は確定しません。IEC
-          60063の推奨対応ではE3は±20%より広い公差、E192は±1%より狭い公差です。実際の公差は部品の仕様を確認してください。
+          公差は各E系列で一般的に対応づけられる代表例です。実際の公差は部品の仕様を確認してください。
         </p>
         <p className={styles.note}>
           コピーアイコンは各系列を1以上10未満の値に揃え、カンマ＋スペース区切りでコピーします（例：1.0,
@@ -175,21 +172,8 @@ function Tables() {
           aria-label="E192の表・スクロール領域"
           tabIndex={0}
         >
-          <table
-            className={`${styles.table} ${styles.e192}`}
-            aria-describedby="decade-note e192-note tolerance-note"
-          >
+          <table className={styles.table} aria-describedby="decade-note e192-note tolerance-note">
             <caption className="sr-only">E192の全192標準値</caption>
-            <thead>
-              <tr>
-                {Array.from({ length: 8 }, (_, column) => (
-                  <th scope="col" key={column}>
-                    <span className="sr-only">E192 </span>
-                    {column + 1}列目
-                  </th>
-                ))}
-              </tr>
-            </thead>
             <tbody>
               {Array.from({ length: 24 }, (_, row) => (
                 <tr key={row} className={row % 4 === 0 ? styles.groupStart : undefined}>

@@ -105,7 +105,74 @@ test('24基準行・固定列数・rowspanと実際のセル境界', async ({ pa
   const e192Rows = page.getByRole('table').last().locator('tbody tr');
   await expect(e192Rows).toHaveCount(24);
   for (const row of await e192Rows.all()) await expect(row.locator('td')).toHaveCount(8);
-  await expect(page.getByRole('table').last().locator('thead th')).toHaveCount(8);
+  await expect(page.getByRole('table').last().locator('thead')).toHaveCount(0);
+});
+
+test('compactな1行header・公差注記・copyの見た目と操作領域', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, 'clipboard', {
+      configurable: true,
+      value: {
+        writeText: () => {
+          document.documentElement.dataset.copyCount = String(
+            Number(document.documentElement.dataset.copyCount ?? 0) + 1,
+          );
+          return Promise.resolve();
+        },
+      },
+    });
+  });
+  await page.goto('tools/e-series/');
+  await page.evaluate(() => document.fonts.ready);
+  const main = page.getByRole('table').first();
+  const mainBox = (await main.boundingBox())!;
+  expect(mainBox.width).toBeLessThan(800);
+  expect((await main.locator('thead').boundingBox())!.height).toBeLessThan(56);
+  const tolerances = ['±40%', '±20%', '±10%', '±5%', '±2%', '±1%', '±0.5%'];
+  const buttons = page.getByRole('button', { name: /E\d+をカンマ区切りでコピー/ });
+  await expect(buttons).toHaveCount(7);
+  for (const [index, name] of (Object.keys(E_SERIES) as ESeriesName[]).entries()) {
+    const button = page.getByRole('button', { name: `${name}をカンマ区切りでコピー` });
+    const heading = button.locator('..');
+    await expect(heading.locator('strong')).toHaveText(name);
+    await expect(heading.locator('small')).toHaveText(tolerances[index]!);
+    expect(await heading.textContent()).not.toContain('例');
+    const layout = await heading.evaluate((element) => {
+      const children = [...element.querySelectorAll('strong, small, button')];
+      return children.map((child) => {
+        const box = child.getBoundingClientRect();
+        return { center: box.y + box.height / 2, x: box.x, width: box.width, height: box.height };
+      });
+    });
+    for (const item of layout) expect(item.center).toBeCloseTo(layout[0]!.center, 0);
+    expect(layout[0]!.x).toBeLessThan(layout[1]!.x);
+    expect(layout[1]!.x).toBeLessThan(layout[2]!.x);
+    expect(layout[2]!.width).toBe(30);
+    expect(layout[2]!.height).toBe(30);
+    await expect(button.locator('svg')).toHaveAttribute('width', '14');
+    const hitArea = await button.evaluate((element) => {
+      const style = getComputedStyle(element, '::after');
+      return { top: style.top, right: style.right, bottom: style.bottom, left: style.left };
+    });
+    expect(hitArea).toEqual({ top: '-5px', right: '-5px', bottom: '-5px', left: '-5px' });
+  }
+  await expect(page.locator('#tolerance-note')).toHaveText(
+    '公差は各E系列で一般的に対応づけられる代表例です。実際の公差は部品の仕様を確認してください。',
+  );
+  await expect(page.getByText(/公差は各E系列で一般的に対応づけられる代表例/)).toHaveCount(1);
+  await expect(page.getByText(/^[1-8]列目$/)).toHaveCount(0);
+  const copy = page.getByRole('button', { name: 'E24をカンマ区切りでコピー' });
+  await copy.focus();
+  await expect(copy).toBeFocused();
+  expect(await copy.evaluate((element) => getComputedStyle(element).outlineStyle)).not.toBe('none');
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('status').filter({ hasText: 'E24をコピーしました' })).toBeVisible();
+  await expect(page.locator('html')).toHaveAttribute('data-copy-count', '1');
+  const target = (await copy.boundingBox())!;
+  await page.mouse.click(target.x + target.width + 3, target.y + target.height / 2);
+  await expect(page.locator('html')).toHaveAttribute('data-copy-count', '2');
+  await expect(copy.locator('.lucide-check')).toBeVisible();
 });
 
 test('表は自然な高さ・Mobile横scroll・keyboard・ページのoverflow', async ({ page }) => {
@@ -118,7 +185,7 @@ test('表は自然な高さ・Mobile横scroll・keyboard・ページのoverflow'
         element.scrollLeft = 0;
       });
       await region.focus();
-      if (width < 768) {
+      if (await region.evaluate((element) => element.scrollWidth > element.clientWidth)) {
         await page.keyboard.press('ArrowRight');
         await expect
           .poll(() => region.evaluate((element) => element.scrollLeft))
@@ -139,12 +206,14 @@ test('表は自然な高さ・Mobile横scroll・keyboard・ページのoverflow'
       expect(metrics.contentHeight).toBe(metrics.height);
       expect(metrics.height).toBeGreaterThanOrEqual(Math.floor(metrics.tableHeight));
       expect(metrics.maxHeight).toBe('none');
-      expect(
-        await region
-          .locator('th')
-          .first()
-          .evaluate((element) => getComputedStyle(element).position),
-      ).toBe('static');
+      if (await region.locator('th').count()) {
+        expect(
+          await region
+            .locator('th')
+            .first()
+            .evaluate((element) => getComputedStyle(element).position),
+        ).toBe('static');
+      }
       expect(
         await page.evaluate(
           (viewportWidth) => document.documentElement.scrollWidth <= viewportWidth,
