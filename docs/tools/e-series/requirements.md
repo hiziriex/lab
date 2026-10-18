@@ -55,3 +55,14 @@ Desktop / Pixel 7、light / darkのfull page、主表全体、Mobile左右scroll
 
 - [IEC 60063:2015 公開プレビュー](https://cdn.standards.iteh.ai/samples/21131/0b431abe83d64551accdfaebc210796e/IEC-60063-2015.pdf) §4、§5、表1〜3。
 - [ROHM List of Nominal Resistance Values](https://fscdn.rohm.com/en/products/databook/applinote/passive/resistor/common/list_of_nominal_resistance_values_an-e.pdf) E24 / E96、decadeの利用方法の照合。
+
+## Visual承認記録（2026-10-18）
+
+人間がcompact版のDesktop / Pixel 7、light / dark、主表・E192・copy配置・公差注記・Mobile横scrollを確認し、現在の表示と既存Desktop Visual差分を承認した。
+
+既存分圧ページのDesktop baselineのみ、承認済みreview ZIP内のactual画像を無加工で登録する。差分はsidebarへのE系列リンク追加とAbout移動。Pixel 7 baselineは一致しているため変更しない。
+
+- Desktop SHA-256: `dc5771244a6731a4ce2f3fe1cce8a5ec7fb913c2def3225f99f7dce1ffcee36d`
+- Pixel 7 SHA-256: `ab02d35a087d60e37376dab8868b5d68d196da42ba493d4fccbc2d7727d5f6e4`
+
+新しいVisual差分はこの承認に含まれない。Lighthouseの標準計測対象にE系列ページを加える。

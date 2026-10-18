@@ -7,6 +7,7 @@ module.exports = {
         'http://127.0.0.1:4322/lab/',
         'http://127.0.0.1:4322/lab/tools/voltage-divider/',
         'http://127.0.0.1:4322/lab/about/',
+        'http://127.0.0.1:4322/lab/tools/e-series/',
       ],
       numberOfRuns: 3,
       settings: { chromeFlags: '--no-sandbox' },
