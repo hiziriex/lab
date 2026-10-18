@@ -1,0 +1,136 @@
+.section {
+  min-width: 0;
+  margin-bottom: 2rem;
+}
+
+.note {
+  color: var(--muted);
+  font-size: 0.85rem;
+  max-width: 90ch;
+}
+
+.scrollHint {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+
+.scroller {
+  overflow: auto;
+  max-height: 85vh;
+  max-height: 85dvh;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  margin-bottom: 0.75rem;
+  background: var(--panel);
+  scrollbar-color: var(--muted) var(--page);
+}
+
+.table {
+  width: 100%;
+  min-width: 1020px;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+  font-family: var(--font-sans);
+  color: var(--ink);
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--panel);
+  border-bottom: 2px solid var(--line);
+  border-right: 1px solid var(--line);
+  padding: 0.65rem 0.5rem;
+  color: var(--accent);
+}
+
+.table th:nth-child(-n + 4) {
+  width: 120px;
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.heading strong {
+  display: block;
+  font-size: 1rem;
+}
+
+.table small,
+.heading small {
+  display: block;
+  color: var(--muted);
+  font-weight: 400;
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+
+.copy {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+}
+
+.table td {
+  height: 30px;
+  padding: 0.25rem;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+.table tr:nth-child(4n + 1),
+.table tr:nth-child(4n + 2) {
+  background: var(--page);
+}
+
+.table tr:hover {
+  background: color-mix(in srgb, var(--accent) 9%, var(--panel));
+}
+
+.seriesEnd,
+.e192 td {
+  border-right: 1px solid var(--line);
+}
+
+.groupStart td {
+  border-top: 1px solid var(--muted);
+}
+
+.common {
+  font-weight: 700;
+}
+
+.e192 {
+  min-width: 680px;
+}
+
+.e192 th:nth-child(n) {
+  width: auto;
+}
+
+.standaloneHeading {
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+
+.failure {
+  display: block;
+  color: var(--ink);
+  font-size: 0.75rem;
+  font-weight: 400;
+}

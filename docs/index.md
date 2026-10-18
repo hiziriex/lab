@@ -31,6 +31,10 @@
 
 ## Tools
 
+### E系列標準値一覧
+
+- `tools/e-series/requirements.md`
+
 ### Voltage Divider
 
 - `tools/voltage-divider/requirements.md`

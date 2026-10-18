@@ -99,6 +99,8 @@ MIT License。
 カテゴリ・日付は URL に含めず metadata として管理する。
 trailing slash ありで統一する。
 
+技術資料として `/tools/e-series/` にE系列標準値一覧を提供する。ホームの技術資料と共通navigationからリンクし、詳細は `docs/tools/e-series/requirements.md` を参照する。
+
 ## 8. HTML title
 
 - Top: `Hiziriex Lab`
