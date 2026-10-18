@@ -17,6 +17,10 @@
 - A/Bカーソルをclick / tap・drag・Vinの直接入力で配置し、2点間の差分と傾きを測定可能。A/Bの間隔を保った連動移動にも対応。
 - Desktop / Mobile、light / darkに対応。スマートフォンでは候補表を横にスクロールできます。
 
+### [E系列標準値一覧](https://hiziriex.github.io/lab/tools/e-series/)
+
+E3 / E6 / E12 / E24 / E48 / E96を対応関係付きの表で比較でき、E192は専用一覧で確認できます。各系列の標準値をカンマ＋スペース区切りでコピーできます。Desktop / Mobile、light / dark、keyboard操作に対応しています。
+
 ## 使い方
 
 1. [分圧抵抗計算を開く](https://hiziriex.github.io/lab/tools/voltage-divider/)。
@@ -30,7 +34,7 @@
 
 ## 現在のバージョン
 
-**[v0.2.0](https://github.com/hiziriex/lab/releases/tag/v0.2.0)**。更新内容は[リリース一覧](https://github.com/hiziriex/lab/releases)で確認できます。
+**[v0.3.0](https://github.com/hiziriex/lab/releases/tag/v0.3.0)**。更新内容は[リリース一覧](https://github.com/hiziriex/lab/releases)で確認できます。
 
 ## License
 
