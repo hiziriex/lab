@@ -19,9 +19,8 @@
 }
 
 .scroller {
-  overflow: auto;
-  max-height: 85vh;
-  max-height: 85dvh;
+  position: relative;
+  overflow-x: auto;
   border: 1px solid var(--line);
   border-radius: 6px;
   margin-bottom: 0.75rem;
@@ -31,7 +30,7 @@
 
 .table {
   width: 100%;
-  min-width: 1020px;
+  min-width: 960px;
   border-collapse: separate;
   border-spacing: 0;
   table-layout: fixed;
@@ -44,9 +43,6 @@
 }
 
 .table th {
-  position: sticky;
-  top: 0;
-  z-index: 1;
   background: var(--panel);
   border-bottom: 2px solid var(--line);
   border-right: 1px solid var(--line);
@@ -59,6 +55,8 @@
 }
 
 .heading {
+  position: relative;
+  color: var(--accent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -90,6 +88,7 @@
   height: 30px;
   padding: 0.25rem;
   border-bottom: 1px solid var(--line);
+  border-right: 1px solid var(--line);
   white-space: nowrap;
 }
 
@@ -102,17 +101,18 @@
   background: color-mix(in srgb, var(--accent) 9%, var(--panel));
 }
 
-.seriesEnd,
-.e192 td {
-  border-right: 1px solid var(--line);
+.seriesEnd {
+  border-right: 2px solid var(--line);
 }
 
 .groupStart td {
   border-top: 1px solid var(--muted);
 }
 
-.common {
-  font-weight: 700;
+.merged {
+  vertical-align: middle;
+  background: var(--panel);
+  font-weight: 500;
 }
 
 .e192 {

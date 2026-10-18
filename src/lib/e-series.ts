@@ -36,22 +36,3 @@ export function formatSeriesForCopy(name: ESeriesName): string {
   const { values, digits } = E_SERIES[name];
   return values.map((value) => (value / 10 ** (digits - 1)).toFixed(digits - 1)).join(', ');
 }
-
-/** 数値の比で最も近いE24へ配置。同値は必ず同じグループに入る。 */
-export function getComparisonGroups() {
-  const groups = e24.map((anchor) => ({ anchor, E48: [] as number[], E96: [] as number[] }));
-  for (const name of ['E48', 'E96'] as const) {
-    for (const value of E_SERIES[name].values) {
-      let closest = 0;
-      for (let index = 1; index < e24.length; index++) {
-        if (
-          Math.abs(Math.log(value / (e24[index]! * 10))) <
-          Math.abs(Math.log(value / (e24[closest]! * 10)))
-        )
-          closest = index;
-      }
-      groups[closest]![name].push(value);
-    }
-  }
-  return groups;
-}

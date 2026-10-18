@@ -1,10 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-  E_SERIES,
-  MAIN_SERIES,
-  formatSeriesForCopy,
-  getComparisonGroups,
-} from '../../src/lib/e-series';
+import { E_SERIES, MAIN_SERIES, formatSeriesForCopy } from '../../src/lib/e-series';
 
 describe('IEC 60063の標準値', () => {
   it.each(Object.entries(E_SERIES))('%sは件数・桁・昇順・重複なしを満たす', (name, series) => {
@@ -57,27 +52,5 @@ describe('IEC 60063の標準値', () => {
     expect(formatSeriesForCopy('E24')).toBe(
       '1.0, 1.1, 1.2, 1.3, 1.5, 1.6, 1.8, 2.0, 2.2, 2.4, 2.7, 3.0, 3.3, 3.6, 3.9, 4.3, 4.7, 5.1, 5.6, 6.2, 6.8, 7.5, 8.2, 9.1',
     );
-  });
-
-  it('主表は全値を1回ずつ配置し、一致値を同じグループに揃える', () => {
-    const groups = getComparisonGroups();
-    expect(groups).toHaveLength(24);
-    for (const name of ['E48', 'E96'] as const) {
-      expect(groups.flatMap((g) => g[name])).toEqual(E_SERIES[name].values);
-      for (const group of groups) {
-        const exact = group.anchor * 10;
-        if (E_SERIES[name].values.some((v) => v === exact)) expect(group[name]).toContain(exact);
-        for (const value of group[name]) {
-          const distance = Math.abs(Math.log(value / exact));
-          expect(
-            groups.every(
-              (other) => distance <= Math.abs(Math.log(value / (other.anchor * 10))) + 1e-12,
-            ),
-          ).toBe(true);
-        }
-      }
-    }
-    expect(Math.max(...groups.map((g) => g.E48.length))).toBe(3);
-    expect(Math.max(...groups.map((g) => g.E96.length))).toBe(6);
   });
 });
