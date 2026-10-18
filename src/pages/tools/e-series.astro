@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ESeriesTable from '../../components/tools/ESeriesTable';
+import { ExternalLink } from 'lucide-react';
+---
+
+<BaseLayout
+  title="E系列標準値一覧"
+  description="E3〜E192の標準値を、系列間の値の位置関係とあわせて確認・コピーできます。"
+>
+  <ESeriesTable client:load />
+  <noscript>
+    <p>一覧表はJavaScriptなしでも参照できます。コピー操作にはJavaScriptが必要です。</p>
+  </noscript>
+  <section aria-labelledby="sources-title">
+    <h2 id="sources-title">出典と表の読み方</h2>
+    <p>
+      IEC
+      60063:2015の表1・表2の値と、表3の公差に対する推奨系列を参照しています。主表の行は各系列の値の個数に合わせた配置であり、系列間の値の一致や公差範囲を表すものではありません。
+    </p>
+    <p>
+      <a
+        href="https://cdn.standards.iteh.ai/samples/21131/0b431abe83d64551accdfaebc210796e/IEC-60063-2015.pdf"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        IEC 60063:2015（公開プレビュー） <ExternalLink size={12} />
+      </a>
+    </p>
+  </section>
+</BaseLayout>

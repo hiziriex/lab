@@ -142,7 +142,7 @@ state 例:
 初期は warning。
 
 `pnpm lighthouse` は Playwright Chromium を専用の一時 profile で起動し、LHCI をその検証ポートへ接続する。
-WSL で Windows Chrome を探索せず、ブラウザの追加 download / ZIP 展開も行わない。3 URL を各 3 回測定し、結果は `.lighthouseci/reports/` に保存する。
+WSL で Windows Chrome を探索せず、ブラウザの追加 download / ZIP 展開も行わない。ホーム / 分圧抵抗計算 / About / E系列標準値一覧の4 URLを各3回測定し、結果は `.lighthouseci/reports/` に保存する。
 
 ## 11. Bundle
 
